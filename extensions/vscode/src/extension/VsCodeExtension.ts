@@ -143,7 +143,7 @@ export class VsCodeExtension {
       this.editDecorationManager,
     );
     resolveVerticalDiffManager?.(this.verticalDiffManager);
-    this.tabAutocompleteModel = new TabAutocompleteModel(this.configHandler);
+    this.tabAutocompleteModel = new TabAutocompleteModel(this.configHandler, this.ide);
 
     setupRemoteConfigSync(
       this.configHandler.reloadConfig.bind(this.configHandler),

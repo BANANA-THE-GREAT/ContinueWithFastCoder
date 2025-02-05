@@ -108,6 +108,12 @@ type OllamaRawResponse =
       response: string; // the generated response
     });
 
+type ZztResponse = 
+| OllamaErrorResponse
+| {
+  token: string; // the generated response
+};
+
 type OllamaChatResponse =
   | OllamaErrorResponse
   | (OllamaBaseResponse & {
@@ -309,8 +315,9 @@ class Ollama extends BaseLLM {
     };
   }
 
-  private getEndpoint(endpoint: string): URL {
-    let base = this.apiBase;
+  getEndpoint(endpoint: string): URL {
+    // let base = this.apiBase;
+    let base = "http://localhost:8000/";
     if (process.env.IS_BINARY) {
       base = base?.replace("localhost", "127.0.0.1");
     }
@@ -323,7 +330,7 @@ class Ollama extends BaseLLM {
     signal: AbortSignal,
     options: CompletionOptions,
   ): AsyncGenerator<string> {
-    const response = await this.fetch(this.getEndpoint("api/generate"), {
+    const response = await this.fetch(this.getEndpoint("run_service"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -345,11 +352,12 @@ class Ollama extends BaseLLM {
         const chunk = chunks[i];
         if (chunk.trim() !== "") {
           try {
-            const j = JSON.parse(chunk) as OllamaRawResponse;
+            // const j = JSON.parse(chunk) as OllamaRawResponse;
+            const j = JSON.parse(chunk) as ZztResponse;
             if ("error" in j) {
               throw new Error(j.error);
             }
-            yield j.response;
+            yield j.token;
           } catch (e) {
             throw new Error(`Error parsing Ollama response: ${e} ${chunk}`);
           }
