@@ -79,28 +79,6 @@ export class TabAutocompleteModel {
     return undefined;
   }
 
-  async sendData(url: string, data: string) {
-    try {
-      const response = await fetch(url, {
-        method: "POST", // 请求方法
-        headers: {
-          "Content-Type": "application/json", // 设置请求体为 JSON 格式
-        },
-        body: JSON.stringify({"content" : data}), // 将数据转为 JSON 字符串
-      });
-  
-      // 处理响应
-      if (!response.ok) {
-        throw new Error("Network response was not ok.");
-      }
-  
-      const responseData = await response.json();
-      console.log("Response from backend:", responseData);
-    } catch (error) {
-      console.error("Error sending data:", error);
-    }
-  }
-
   async get_datastore_repo(llm: Ollama) {
     // 处理工作区中的所有目录
     const dir = this.getWorkspaceRoot();

@@ -330,15 +330,33 @@ class Ollama extends BaseLLM {
     signal: AbortSignal,
     options: CompletionOptions,
   ): AsyncGenerator<string> {
-    const response = await this.fetch(this.getEndpoint("run_service"), {
+    // 删除特殊 token
+    let processed_prompt = prompt.replace(/<｜fim▁begin｜>/g, '');
+    const fimHoleIndex = processed_prompt.indexOf("<｜fim▁hole｜>");
+    if (fimHoleIndex !== -1) {
+      processed_prompt = processed_prompt.substring(0, fimHoleIndex);
+    }
+
+    let response = await this.fetch(this.getEndpoint("run_service"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.apiKey}`,
       },
-      body: JSON.stringify(this._getGenerateOptions(options, prompt)),
+      body: JSON.stringify(this._getGenerateOptions(options, processed_prompt)),
       signal,
     });
+    if (response.status == 429) {
+      response = await this.fetch(this.getEndpoint("run_service"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.apiKey}`,
+        },
+        body: JSON.stringify(this._getGenerateOptions(options, processed_prompt)),
+        signal,
+      });
+    }
 
     let buffer = "";
     for await (const value of streamResponse(response)) {
