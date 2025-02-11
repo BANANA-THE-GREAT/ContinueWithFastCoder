@@ -112,6 +112,7 @@ type ZztResponse =
 | OllamaErrorResponse
 | {
   token: string; // the generated response
+  source: "datastore" | "cache" | "model";
 };
 
 type OllamaChatResponse =
@@ -375,7 +376,14 @@ class Ollama extends BaseLLM {
             if ("error" in j) {
               throw new Error(j.error);
             }
-            yield j.token;
+            if (j.source == "cache") {
+              yield "<｜c>" + j.token + "<c｜>";
+            } else if (j.source = "datastore") {
+              yield "<｜d>" + j.token + "<d｜>";
+            } else {
+              yield "<｜m>" + j.token + "<m｜>";
+            }
+            // yield j.token;
           } catch (e) {
             throw new Error(`Error parsing Ollama response: ${e} ${chunk}`);
           }
