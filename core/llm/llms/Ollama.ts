@@ -112,7 +112,7 @@ type ZztResponse =
 | OllamaErrorResponse
 | {
   token: string; // the generated response
-  source: "datastore" | "cache" | "model";
+  source: "datastore" | "cache" | "model" | undefined;
 };
 
 type OllamaChatResponse =
@@ -316,6 +316,16 @@ class Ollama extends BaseLLM {
     };
   }
 
+  static useAccMethod: boolean = true;
+
+  static enableAcc():void {
+    this.useAccMethod = true;
+  }
+
+  static disableAcc():void {
+    this.useAccMethod = false;
+  }
+
   getEndpoint(endpoint: string): URL {
     // let base = this.apiBase;
     let base = "http://localhost:8000/";
@@ -378,7 +388,7 @@ class Ollama extends BaseLLM {
             }
             if (j.source == "cache") {
               yield "<｜c>" + j.token + "<c｜>";
-            } else if (j.source = "datastore") {
+            } else if (j.source == "datastore") {
               yield "<｜d>" + j.token + "<d｜>";
             } else {
               yield "<｜m>" + j.token + "<m｜>";
