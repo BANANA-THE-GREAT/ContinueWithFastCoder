@@ -354,7 +354,10 @@ class Ollama extends BaseLLM {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.apiKey}`,
       },
-      body: JSON.stringify(this._getGenerateOptions(options, processed_prompt)),
+      body: JSON.stringify({
+        ...this._getGenerateOptions(options, processed_prompt), // 保留原有的字段
+        useAcc: Ollama.useAccMethod,  // 直接添加 useAcc 字段
+      }),
       signal,
     });
     if (response.status == 429) {

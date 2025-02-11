@@ -172,6 +172,19 @@ function loadSerializedConfig(
       ? [...defaultSlashCommandsVscode]
       : [...defaultSlashCommandsJetBrains];
 
+  config.slashCommands.push({
+    name: "renew",
+    description: "renew the repo datastore",
+  });
+  config.slashCommands.push({
+    name: "enableAcc",
+    description: "enable the acceleration method",
+  });
+  config.slashCommands.push({
+    name: "disableAcc",
+    description: "disable the acceleration method",
+  });
+
   // Temporarily disabling this check until we can verify the commands are accuarate
   // if (!isSupportedLanceDbCpuTarget(ide)) {
   //   config.disableIndexing = true;
