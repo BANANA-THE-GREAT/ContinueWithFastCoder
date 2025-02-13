@@ -360,14 +360,17 @@ class Ollama extends BaseLLM {
       }),
       signal,
     });
-    if (response.status == 429) {
+    if (await response.text() == "busy") {
       response = await this.fetch(this.getEndpoint("run_service"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.apiKey}`,
         },
-        body: JSON.stringify(this._getGenerateOptions(options, processed_prompt)),
+        body: JSON.stringify({
+          ...this._getGenerateOptions(options, processed_prompt), // 保留原有的字段
+          useAcc: Ollama.useAccMethod,  // 直接添加 useAcc 字段
+        }),
         signal,
       });
     }
@@ -389,17 +392,18 @@ class Ollama extends BaseLLM {
             if ("error" in j) {
               throw new Error(j.error);
             }
-            if (Ollama.useAccMethod) {
-              if (j.source == "cache") {
-                yield "<｜c>" + j.token + "<c｜>";
-              } else if (j.source == "datastore") {
-                yield "<｜d>" + j.token + "<d｜>";
-              } else {
-                yield "<｜m>" + j.token + "<m｜>";
-              }
-            } else {
-              yield j.token;
-            }
+            // if (Ollama.useAccMethod) {
+            //   if (j.source == "cache") {
+            //     yield "<｜c>" + j.token + "<c｜>";
+            //   } else if (j.source == "datastore") {
+            //     yield "<｜d>" + j.token + "<d｜>";
+            //   } else {
+            //     yield "<｜m>" + j.token + "<m｜>";
+            //   }
+            // } else {
+            //   yield j.token;
+            // }
+            yield j.token;
           } catch (e) {
             throw new Error(`Error parsing Ollama response: ${e} ${chunk}`);
           }
