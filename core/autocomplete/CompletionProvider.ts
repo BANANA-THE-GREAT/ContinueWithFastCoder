@@ -107,7 +107,7 @@ export class CompletionProvider {
 
   public accept(completionId: string) {
     const outcome = this.loggingService.accept(completionId);
-    console.log("accept conpletion: ", outcome);
+    // console.log("accept conpletion: ", outcome);
     if (!outcome) {
       return;
     }
