@@ -8,6 +8,8 @@ import OnboardSlashCommand from "./onboard";
 import RenewRepoDatastoreCommand from "./renew";
 import ReviewMessageCommand from "./review";
 import ShareSlashCommand from "./share";
+import EnableGuiMethodCommand from "./enableGui";
+import DisableGuiMethodCommand from "./disableGui";
 
 export default [
   DraftIssueCommand,
@@ -20,4 +22,6 @@ export default [
   RenewRepoDatastoreCommand,
   EnableAccelerationMethodCommand,
   DisableAccelerationMethodCommand,
+  EnableGuiMethodCommand,
+  DisableGuiMethodCommand,
 ];

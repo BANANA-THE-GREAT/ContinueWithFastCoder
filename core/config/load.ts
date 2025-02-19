@@ -184,6 +184,14 @@ function loadSerializedConfig(
     name: "disableAcc",
     description: "disable the acceleration method",
   });
+  config.slashCommands.push({
+    name: "enableGui",
+    description: "enable the completion Gui method",
+  });
+  config.slashCommands.push({
+    name: "disableGui",
+    description: "disable the completion Gui method",
+  });
 
   // Temporarily disabling this check until we can verify the commands are accuarate
   // if (!isSupportedLanceDbCpuTarget(ide)) {

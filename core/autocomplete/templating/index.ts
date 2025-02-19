@@ -56,11 +56,13 @@ export function renderPrompt({
 }): {
   prompt: string;
   prefix: string;
+  fullPrefix: string;
   suffix: string;
   completionOptions: Partial<CompletionOptions> | undefined;
 } {
   // If prefix is manually passed
   let prefix = helper.input.manuallyPassPrefix || helper.prunedPrefix;
+  let fullPrefix = helper.fullPrefix;
   let suffix = helper.input.manuallyPassPrefix ? "" : helper.prunedSuffix;
   if (suffix === "") {
     suffix = "\n";
@@ -119,6 +121,7 @@ export function renderPrompt({
   return {
     prompt,
     prefix,
+    fullPrefix,
     suffix,
     completionOptions: {
       ...completionOptions,

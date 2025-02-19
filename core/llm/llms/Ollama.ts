@@ -4,6 +4,7 @@ import { ChatMessage, CompletionOptions, LLMOptions } from "../../index.js";
 import { renderChatMessage } from "../../util/messageContent.js";
 import { BaseLLM } from "../index.js";
 import { streamResponse } from "../stream.js";
+// import { enable, disable } from "../../../extensions/vscode/src/autocomplete/completionProvider.js"
 
 type OllamaChatMessage = {
   role: "tool" | "user" | "assistant" | "system";
@@ -324,6 +325,18 @@ class Ollama extends BaseLLM {
 
   static disableAcc():void {
     this.useAccMethod = false;
+  }
+
+  static useGui: boolean = true;
+
+  static enableGui():void {
+    this.useGui = true;
+    // enable();
+  }
+
+  static disableGui():void {
+    this.useGui = false;
+    // disable();
   }
 
   getEndpoint(endpoint: string): URL {

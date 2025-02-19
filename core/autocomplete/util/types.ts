@@ -35,6 +35,7 @@ export interface AutocompleteOutcome extends TabAutocompleteOptions {
   accepted?: boolean;
   time: number;
   prefix: string;
+  fullPrefix: string;
   suffix: string;
   prompt: string;
   completion: string;

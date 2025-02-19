@@ -25,7 +25,34 @@ import type { TabAutocompleteModel } from "../util/loadAutocompleteModel";
 import { startLocalOllama } from "core/util/ollamaHelper";
 import type { IDE } from "core";
 
+import Ollama from "core/llm/llms/Ollama";
+import * as fs from 'fs';
+import * as path from 'path';
+import { C } from "core/autocomplete/constants/AutocompleteLanguageInfo";
+
 const Diff = require("diff");
+const decoratedRanges = new Map<vscode.TextEditor, vscode.Range[]>();
+
+export const decorationTypeForCache = vscode.window.createTextEditorDecorationType({
+  fontStyle: 'italic', // 斜体
+  color: 'rgba(255, 166, 0, 0.75)', // 可选的颜色
+});
+
+export const decorationTypeForStore = vscode.window.createTextEditorDecorationType({
+  fontStyle: 'italic', // 斜体
+  color: 'rgba(255, 17, 0, 0.83)', // 可选的颜色
+});
+
+export const decorationTypeForModel = vscode.window.createTextEditorDecorationType({
+  fontStyle: 'italic', // 斜体
+  color: 'rgba(47, 255, 0, 0.75)', // 可选的颜色
+});
+
+export let cacheRanges: { [filepath: string]: vscode.Range[] } = {};
+export let storeRanges: { [filepath: string]: vscode.Range[] } = {};
+export let modelRanges: { [filepath: string]: vscode.Range[] } = {};
+export let curFilePath: string = '';
+let group = 0;
 
 interface DiffType {
   count: number;
@@ -238,6 +265,7 @@ export class ContinueCompletionProvider
       if (selectedCompletionInfo) {
         outcome.completion = selectedCompletionInfo.text + outcome.completion;
       }
+      // outcome.completion = "<｜c> main():<c｜>Th<｜m>is is a sample text<m｜> for <｜d>wrapping<d｜>";
       const willDisplay = this.willDisplay(
         document,
         selectedCompletionInfo,
@@ -312,8 +340,10 @@ export class ContinueCompletionProvider
         range = new vscode.Range(startPos, document.lineAt(startPos).range.end);
       }
 
+      // completionText = "<｜c> main():<c｜>";
+      let processedText = completionText.replace(/<｜c>|<c｜>|<｜d>|<d｜>|<｜m>|<m｜>/g, '');
       const completionItem = new vscode.InlineCompletionItem(
-        completionText,
+        processedText,
         range,
         {
           title: "Log Autocomplete Outcome",
@@ -322,6 +352,151 @@ export class ContinueCompletionProvider
         },
       );
 
+      //////////////////////////////////////////////
+      
+      const editor = vscode.window.activeTextEditor;
+      const autocompleteFilePath = path.join(path.dirname(document.fileName), '..\\extensions\\.continue-debug\\dev_data\\autocomplete.jsonl');
+      let autocompleteResults:any = [];
+      // cacheRanges = [];
+      // modelRanges = [];
+      // storeRanges = [];
+      // const autocompleteResults = autocompleteData.split('\n').map(line => JSON.parse(line));
+      curFilePath = outcome.filepath;
+      if (!cacheRanges[curFilePath]) {
+        cacheRanges[curFilePath] = [];
+        modelRanges[curFilePath] = [];
+        storeRanges[curFilePath] = [];
+      }
+      const curText = editor?.document.getText();
+      fs.readFile(autocompleteFilePath, 'utf-8', (err, data) => {
+        if (err) {
+            console.error('读取文件时发生错误:', err);
+            return;
+        }
+        // autocompleteResults = data.split('\n').map(line => JSON.parse(line));
+        const lines = data.split('\n');
+        console.log("hello");
+        // 解析每一行为 JSON 对象
+        for (let line of lines) {
+            line = line.trim(); // 去除首尾空格
+            if (line) { // 确保不是空行
+                try {
+                    const json = JSON.parse(line);
+                    autocompleteResults.push(json);
+                } catch (e) {
+                    vscode.window.showWarningMessage(`Failed to parse line: ${line}`);
+                }
+            }
+        }
+        
+        // 输出结果（调试用）
+        // console.log(autocompleteResults);
+        autocompleteResults = autocompleteResults.filter((item:any) => 
+          item.filepath === curFilePath && item.accepted === true
+        );
+
+        const matchingRanges: vscode.Range[] = [];
+        for (const item of autocompleteResults) {
+          if (curText && editor && curText.startsWith(item.fullPrefix)) {
+            const textAfterPrefix = curText.slice(item.fullPrefix.length);
+            const filteredCompletion = item.completion.replace(/<｜c>|<c｜>|<｜d>|<d｜>|<｜m>|<m｜>/g, '');
+            if (textAfterPrefix.startsWith(filteredCompletion)) {
+              const start0 = editor.document.positionAt(item.fullPrefix.length);
+              const end0 = editor.document.positionAt(item.fullPrefix.length + filteredCompletion.length);
+              const range = new vscode.Range(start0, end0);
+              const isDuplicate = matchingRanges.some(r => 
+                 r.start.isEqual(range.start) && r.end.isEqual(range.end)
+              );
+              if (!isDuplicate) {
+                matchingRanges.push(range);
+              }
+
+              const completionWithTags = item.completion;
+              let start = editor.document.positionAt(item.fullPrefix.length);
+              let end = start;
+              let distance = 0;
+              for (let i = 0; i < completionWithTags.length; i++) {
+                const char = completionWithTags[i];
+                const nextChar = completionWithTags[i + 1];
+                const nextNextChar = completionWithTags[i + 2];
+                const nextNextNextChar = completionWithTags[i + 3];
+                if (char === '<' && nextChar === '｜' && nextNextChar === 'c' && nextNextNextChar === '>') {
+                  group = 1;
+                  i += 3; 
+                } else if (char === '<' && nextChar === '｜' && nextNextChar === 'd' && nextNextNextChar === '>') {
+                  group = 2;
+                  i += 3; 
+                } else if (char === '<' && nextChar === '｜' && nextNextChar === 'm' && nextNextNextChar === '>') {
+                  group = 3;
+                  i += 3; 
+                } else if (char === '<' && (nextChar === 'c' || nextChar === 'd' || nextChar === 'm') && nextNextChar === '｜' && nextNextNextChar === '>') {
+                  end = editor.document.positionAt(editor.document.offsetAt(start) + distance);
+                  const range = new vscode.Range(start, end);
+                  if (group === 1) {
+                    if (!cacheRanges[curFilePath].some(r => r.start.isEqual(range.start) && r.end.isEqual(range.end))) {
+                      cacheRanges[curFilePath].push(range);
+                    }
+                  } else if (group === 2) {
+                    if (!storeRanges[curFilePath].some(r => r.start.isEqual(range.start) && r.end.isEqual(range.end))) {
+                      storeRanges[curFilePath].push(range);
+                    }
+                  } else if (group === 3) {
+                    if (!modelRanges[curFilePath].some(r => r.start.isEqual(range.start) && r.end.isEqual(range.end))) {
+                      modelRanges[curFilePath].push(range);
+                    }
+                  }
+                  start = end;
+                  distance = 0;
+                  i += 3; 
+                } else {
+                  distance++;
+                }
+              }
+              if (distance != 0) {
+                end = editor.document.positionAt(editor.document.offsetAt(start) + distance);
+                const range = new vscode.Range(start, end);
+                  if (group === 1) {
+                    if (!cacheRanges[curFilePath].some(r => r.start.isEqual(range.start) && r.end.isEqual(range.end))) {
+                      cacheRanges[curFilePath].push(range);
+                    }
+                  } else if (group === 2) {
+                    if (!storeRanges[curFilePath].some(r => r.start.isEqual(range.start) && r.end.isEqual(range.end))) {
+                      storeRanges[curFilePath].push(range);
+                    }
+                  } else if (group === 3) {
+                    if (!modelRanges[curFilePath].some(r => r.start.isEqual(range.start) && r.end.isEqual(range.end))) {
+                      modelRanges[curFilePath].push(range);
+                    }
+                  }
+                start = end;
+                distance = 0;
+              }
+            }
+          }
+        }
+    
+        // 输出匹配的 range（调试用）
+        console.log(matchingRanges);
+  
+        if (editor) {
+          if (Ollama.useGui) {
+            // editor.setDecorations(decorationTypeForCache, matchingRanges);
+            editor.setDecorations(decorationTypeForCache, cacheRanges[curFilePath]);
+            editor.setDecorations(decorationTypeForModel, modelRanges[curFilePath]);
+            editor.setDecorations(decorationTypeForStore, storeRanges[curFilePath]);
+          } else {
+            editor.setDecorations(decorationTypeForCache, []);
+            editor.setDecorations(decorationTypeForModel, []);
+            editor.setDecorations(decorationTypeForStore, []);
+          }
+        }
+      }
+    );
+      // const autocompleteData = fs.readFileSync(autocompleteFilePath, 'utf-8');
+      
+
+      //////////////////////////////////////////////
+      
       (completionItem as any).completeBracketPairs = true;
       return [completionItem];
     } finally {
@@ -354,6 +529,19 @@ export class ContinueCompletionProvider
   }
 }
 
+function getDecorationRanges(document: vscode.TextDocument, matchingRanges: vscode.Range[]): vscode.DecorationOptions[] {
+  const decorations: vscode.DecorationOptions[] = [];
+  const lineCount = document.lineCount;
+
+  for (let i = 0; i < lineCount; i++) {
+      const line = document.lineAt(i);
+      const range = new vscode.Range(line.range.start, line.range.end);
+      decorations.push({ range });
+  }
+
+  return decorations;
+}
+
 type DiffPartType = "+" | "-" | "=";
 
 function diffPatternMatches(
@@ -375,4 +563,22 @@ function diffPatternMatches(
   }
 
   return true;
+}
+
+export function enable(): void {
+  const editor = vscode.window.activeTextEditor;
+  if (editor) {
+    editor.setDecorations(decorationTypeForCache, cacheRanges[curFilePath]);
+    editor.setDecorations(decorationTypeForModel, modelRanges[curFilePath]);
+    editor.setDecorations(decorationTypeForStore, storeRanges[curFilePath]);
+  }
+}
+
+export function disable(): void {
+  const editor = vscode.window.activeTextEditor;
+  if (editor) {
+    editor.setDecorations(decorationTypeForCache, []);
+    editor.setDecorations(decorationTypeForModel, []);
+    editor.setDecorations(decorationTypeForStore, []);
+  }
 }

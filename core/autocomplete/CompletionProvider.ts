@@ -107,9 +107,11 @@ export class CompletionProvider {
 
   public accept(completionId: string) {
     const outcome = this.loggingService.accept(completionId);
+    console.log("accept conpletion: ", outcome);
     if (!outcome) {
       return;
     }
+    //括号匹配
     this.bracketMatchingService.handleAcceptedCompletion(
       outcome.completion,
       outcome.filepath,
@@ -133,17 +135,20 @@ export class CompletionProvider {
     input: AutocompleteInput,
     token: AbortSignal | undefined,
   ): Promise<AutocompleteOutcome | undefined> {
+    console.log("!!!Entering core/completionProvider");
     try {
       const startTime = Date.now();
       const options = await this._getAutocompleteOptions();
 
       // Debounce
       if (await this.debouncer.delayAndShouldDebounce(options.debounceDelay)) {
+        console.log("Autocomplete debounced");
         return undefined;
       }
 
       const llm = await this._prepareLlm();
       if (!llm) {
+        console.warn("No LLM available for autocompletion");
         return undefined;
       }
 
@@ -155,6 +160,7 @@ export class CompletionProvider {
       );
 
       if (await shouldPrefilter(helper, this.ide)) {
+        console.log("Prefiltered");
         return undefined;
       }
 
@@ -176,7 +182,7 @@ export class CompletionProvider {
         this.ide.getWorkspaceDirs(),
       ]);
 
-      const { prompt, prefix, suffix, completionOptions } = renderPrompt({
+      const { prompt, prefix, fullPrefix, suffix, completionOptions } = renderPrompt({
         snippetPayload,
         workspaceDirs,
         helper,
@@ -216,6 +222,7 @@ export class CompletionProvider {
 
         // Don't postprocess if aborted
         if (token.aborted) {
+          console.log("Autocomplete aborted");
           return undefined;
         }
 
@@ -232,6 +239,7 @@ export class CompletionProvider {
       }
 
       if (!completion) {
+        console.log("No completion found");
         return undefined;
       }
 
@@ -239,6 +247,7 @@ export class CompletionProvider {
         time: Date.now() - startTime,
         completion,
         prefix,
+        fullPrefix,
         suffix,
         prompt,
         modelProvider: llm.providerName,
