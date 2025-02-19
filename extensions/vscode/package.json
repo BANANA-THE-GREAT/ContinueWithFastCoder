@@ -337,6 +337,18 @@
         "category": "Continue",
         "group": "Continue",
         "icon": "$(account)"
+      },
+      {
+        "command": "continue.enableGui",
+        "title": "Enable displaying code source",
+        "category": "Continue",
+        "group": "Continue"
+      },
+      {
+        "command": "continue.disableGui",
+        "title": "Disable displaying code source",
+        "category": "Continue",
+        "group": "Continue"
       }
     ],
     "keybindings": [
@@ -497,6 +509,16 @@
           "command": "continue.fixGrammar",
           "group": "Continue",
           "when": "editorHasSelection && editorLangId == 'markdown'"
+        },
+        {
+          "command": "continue.enableGui",
+          "group": "Continue",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "continue.disableGui",
+          "group": "Continue",
+          "when": "editorHasSelection"
         }
       ],
       "explorer/context": [

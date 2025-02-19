@@ -26,6 +26,7 @@ import { startLocalOllama } from "core/util/ollamaHelper";
 import type { IDE } from "core";
 
 import Ollama from "core/llm/llms/Ollama";
+import { useGui } from "../commands";
 import * as fs from 'fs';
 import * as path from 'path';
 import { C } from "core/autocomplete/constants/AutocompleteLanguageInfo";
@@ -479,7 +480,7 @@ export class ContinueCompletionProvider
         console.log(matchingRanges);
   
         if (editor) {
-          if (Ollama.useGui) {
+          if (useGui) {
             // editor.setDecorations(decorationTypeForCache, matchingRanges);
             editor.setDecorations(decorationTypeForCache, cacheRanges[curFilePath]);
             editor.setDecorations(decorationTypeForModel, modelRanges[curFilePath]);

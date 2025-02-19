@@ -33,8 +33,11 @@ import { Battery } from "./util/battery";
 import { VsCodeIde } from "./VsCodeIde";
 
 import type { VsCodeWebviewProtocol } from "./webviewProtocol";
+import { disable, enable } from "./autocomplete/completionProvider";
 
 let fullScreenPanel: vscode.WebviewPanel | undefined;
+
+export let useGui = true;
 
 function getFullScreenTab() {
   const tabs = vscode.window.tabGroups.all.flatMap((tabGroup) => tabGroup.tabs);
@@ -360,6 +363,14 @@ const getCommandsMap: (
     );
   }
   return {
+    "continue.enableGui": () => {
+      useGui = true;
+      enable();
+    },
+    "continue.disableGui": () => {
+      useGui = false;
+      disable();
+    },
     "continue.acceptDiff": async (newFileUri?: string, streamId?: string) =>
       processDiff(
         "accept",
