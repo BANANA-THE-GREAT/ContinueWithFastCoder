@@ -25,7 +25,7 @@ export class TabAutocompleteModel {
     const llm = new Ollama({
       model: "deepseek-coder:6.7b",
     });
-    await this.get_datastore_repo(llm);
+    // await this.get_datastore_repo(llm);
 
     // const llm = new Ollama({
     //   model: this.defaultTag,
