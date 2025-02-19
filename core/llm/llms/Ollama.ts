@@ -405,18 +405,32 @@ class Ollama extends BaseLLM {
             if ("error" in j) {
               throw new Error(j.error);
             }
-            // if (Ollama.useAccMethod) {
-            //   if (j.source == "cache") {
-            //     yield "<｜c>" + j.token + "<c｜>";
-            //   } else if (j.source == "datastore") {
-            //     yield "<｜d>" + j.token + "<d｜>";
-            //   } else {
-            //     yield "<｜m>" + j.token + "<m｜>";
-            //   }
-            // } else {
-            //   yield j.token;
-            // }
-            yield j.token;
+            if (Ollama.useAccMethod) {
+              let mark_front = '';
+              let mark_back  = '';
+              if (j.source == "cache") {
+                mark_front = "<｜c>";
+                mark_back  = "<c｜>";
+              } else if (j.source == "datastore") {
+                mark_front = "<｜d>";
+                mark_back  = "<d｜>";
+              } else {
+                mark_front = "<｜m>";
+                mark_back  = "<m｜>";
+              }
+              
+              const originalString = j.token;
+              if (originalString.startsWith(" ")) {
+                yield " "  + mark_front + originalString.slice(1) + mark_back;
+              } else if (originalString.startsWith("\r")) {
+                yield "\r" + mark_front + originalString.slice(1) + mark_back;
+              } else {
+                yield mark_front + originalString + mark_back;
+              }
+            } else {
+              yield j.token;
+            }
+            // yield j.token;
           } catch (e) {
             throw new Error(`Error parsing Ollama response: ${e} ${chunk}`);
           }

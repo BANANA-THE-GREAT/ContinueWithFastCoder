@@ -98,7 +98,7 @@ const RenewRepoDatastoreCommand: SlashCommand = {
   name: "renew",
   description: "renew the repo datastore",
   run: async function* ({ ide, input }) {
-    get_datastore_repo(ide);
+    await get_datastore_repo(ide);
 
     console.log(input);
   },
