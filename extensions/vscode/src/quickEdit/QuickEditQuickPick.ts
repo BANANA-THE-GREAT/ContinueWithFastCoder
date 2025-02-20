@@ -232,7 +232,7 @@ export class QuickEdit {
         label,
         diffs: this.verticalDiffManager.logDiffs,
         model,
-      });
+      }, '');
       quickPick.dispose();
     });
   }

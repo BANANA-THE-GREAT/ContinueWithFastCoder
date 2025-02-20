@@ -356,7 +356,15 @@ export class ContinueCompletionProvider
       //////////////////////////////////////////////
       
       const editor = vscode.window.activeTextEditor;
-      const autocompleteFilePath = path.join(path.dirname(document.fileName), '..\\extensions\\.continue-debug\\dev_data\\autocomplete.jsonl');
+      const workspaceFolder = vscode.workspace.workspaceFolders;
+      let FilePath = '';
+      if (workspaceFolder && workspaceFolder.length > 0) {
+        FilePath = workspaceFolder[0].uri.fsPath;
+      } else {
+        console.log("there is no workspace dir");
+      }
+      const jsonlFilename = `.autocomplete.jsonl`; // 添加 .jsonl 扩展名
+      const autocompleteFilePath = path.join(FilePath, jsonlFilename);
       let autocompleteResults:any = [];
       // cacheRanges = [];
       // modelRanges = [];

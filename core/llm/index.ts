@@ -344,7 +344,7 @@ export abstract class BaseLLM implements ILLM {
       provider: this.providerName,
       promptTokens: promptTokens,
       generatedTokens: generatedTokens,
-    });
+    }, '');
   }
 
   fetch(url: RequestInfo | URL, init?: RequestInit): Promise<Response> {

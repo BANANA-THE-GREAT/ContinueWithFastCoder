@@ -839,7 +839,14 @@ const getCommandsMap: (
       completionId: string,
       completionProvider: CompletionProvider,
     ) => {
-      completionProvider.accept(completionId);
+      const workspaceFolder = vscode.workspace.workspaceFolders;
+      let FilePath = '';
+      if (workspaceFolder && workspaceFolder.length > 0) {
+        FilePath = workspaceFolder[0].uri.fsPath;
+      } else {
+        console.log("there is no workspace dir");
+      }
+      completionProvider.accept(completionId, FilePath);
     },
     "continue.toggleTabAutocompleteEnabled": () => {
       captureCommandTelemetry("toggleTabAutocompleteEnabled");

@@ -30,7 +30,7 @@ export class AutocompleteLoggingService {
     this._abortControllers.clear();
   }
 
-  public accept(completionId: string): AutocompleteOutcome | undefined {
+  public accept(completionId: string, FilePath: string): AutocompleteOutcome | undefined {
     if (this._logRejectionTimeouts.has(completionId)) {
       clearTimeout(this._logRejectionTimeouts.get(completionId));
       this._logRejectionTimeouts.delete(completionId);
@@ -39,7 +39,7 @@ export class AutocompleteLoggingService {
     if (this._outcomes.has(completionId)) {
       const outcome = this._outcomes.get(completionId)!;
       outcome.accepted = true;
-      this.logAutocompleteOutcome(outcome);
+      this.logAutocompleteOutcome(outcome, FilePath);
       this._outcomes.delete(completionId);
       return outcome;
     }
@@ -60,7 +60,7 @@ export class AutocompleteLoggingService {
     const logRejectionTimeout = setTimeout(() => {
       // Wait 10 seconds, then assume it wasn't accepted
       outcome.accepted = false;
-      this.logAutocompleteOutcome(outcome);
+      this.logAutocompleteOutcome(outcome, '');
       this._logRejectionTimeouts.delete(completionId);
     }, COUNT_COMPLETION_REJECTED_AFTER);
     this._outcomes.set(completionId, outcome);
@@ -95,8 +95,8 @@ export class AutocompleteLoggingService {
     };
   }
 
-  private logAutocompleteOutcome(outcome: AutocompleteOutcome) {
-    logDevData("autocomplete", outcome);
+  private logAutocompleteOutcome(outcome: AutocompleteOutcome, FilePath: string) {
+    logDevData("autocomplete", outcome, FilePath);
     const { prompt, completion, prefix, suffix, ...restOfOutcome } = outcome;
     void Telemetry.capture(
       "autocomplete",

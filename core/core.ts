@@ -251,7 +251,7 @@ export class Core {
 
     // Dev data
     on("devdata/log", (msg) => {
-      logDevData(msg.data.tableName, msg.data.data);
+      logDevData(msg.data.tableName, msg.data.data, '');
     });
 
     // Edit config
@@ -655,7 +655,7 @@ export class Core {
       return outcome ? [outcome.completion] : [];
     });
     on("autocomplete/accept", async (msg) => {
-      this.completionProvider.accept(msg.data.completionId);
+      this.completionProvider.accept(msg.data.completionId, '');
     });
     on("autocomplete/cancel", async (msg) => {
       this.completionProvider.cancel();
