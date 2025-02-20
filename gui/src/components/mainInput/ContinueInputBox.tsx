@@ -49,12 +49,22 @@ const GradientBorder = styled.div<{
   borderRadius?: string;
   borderColor?: string;
   loading: 0 | 1;
+  useAcc: boolean;
 }>`
   border-radius: ${(props) => props.borderRadius || "0"};
   padding: 1px;
   background: ${(props) =>
     props.borderColor
-      ? props.borderColor
+      ? 
+      props.useAcc 
+      ? 
+      `repeating-linear-gradient(
+        101.79deg,                /* 渐变角度为 101.79 度 */
+        #1BBE84 0%,               /* 起始颜色为 #1BBE84 位置在 0% */
+        #1BBE84 100%              /* 结束颜色为 #1BBE84 位置在 100% */
+      )`
+      :
+      props.borderColor
       : `repeating-linear-gradient(
       101.79deg,
       #1BBE84 0%,
@@ -75,6 +85,7 @@ const GradientBorder = styled.div<{
 
 function ContinueInputBox(props: ContinueInputBoxProps) {
   const isStreaming = useAppSelector((state) => state.session.isStreaming);
+  const useAcc = useAppSelector((state) => state.session.useAcc);
   const availableSlashCommands = useAppSelector(
     selectSlashCommandComboBoxInputs,
   );
@@ -116,12 +127,14 @@ function ContinueInputBox(props: ContinueInputBoxProps) {
   return (
     <div className={`${props.hidden ? "hidden" : ""}`}>
       <div className={`relative flex flex-col px-2`}>
+
         <GradientBorder
           loading={isStreaming && props.isLastUserInput ? 1 : 0}
           borderColor={
             isStreaming && props.isLastUserInput ? undefined : vscBackground
           }
           borderRadius={defaultBorderRadius}
+          useAcc={useAcc}
         >
           <TipTapEditor
             editorState={props.editorState}

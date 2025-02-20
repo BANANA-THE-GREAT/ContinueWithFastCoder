@@ -42,6 +42,7 @@ type SessionState = {
   allSessionMetadata: SessionMetadata[];
   history: ChatHistoryItemWithMessageId[];
   isStreaming: boolean;
+  useAcc:boolean;
   title: string;
   id: string;
   selectedProfileId: string;
@@ -82,6 +83,7 @@ const initialState: SessionState = {
   allSessionMetadata: [],
   history: [],
   isStreaming: false,
+  useAcc: true,
   title: NEW_SESSION_TITLE,
   id: uuidv4(),
   selectedProfileId: "local",
@@ -124,6 +126,12 @@ export const sessionSlice = createSlice({
     },
     setActive: (state) => {
       state.isStreaming = true;
+    },
+    enableAcc: (state) => {
+      state.useAcc = true;
+    },
+    disableAcc: (state) => {
+      state.useAcc = false;
     },
     setIsGatheringContext: (state, { payload }: PayloadAction<boolean>) => {
       const curMessage = state.history.at(-1);
@@ -692,6 +700,8 @@ export const {
   addHighlightedCode,
   addPromptCompletionPair,
   setActive,
+  enableAcc,
+  disableAcc,
   submitEditorAndInitAtIndex,
   updateHistoryItemAtIndex,
   clearLastEmptyResponse,

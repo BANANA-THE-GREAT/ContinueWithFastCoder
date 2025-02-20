@@ -6,7 +6,7 @@ import {
   SlashCommandDescription,
 } from "core";
 import { selectDefaultModel } from "../slices/configSlice";
-import { abortStream, streamUpdate } from "../slices/sessionSlice";
+import { abortStream, disableAcc, enableAcc, streamUpdate } from "../slices/sessionSlice";
 import { ThunkApiType } from "../store";
 
 export const streamSlashCommand = createAsyncThunk<
@@ -43,6 +43,12 @@ export const streamSlashCommand = createAsyncThunk<
         clearInterval(checkActiveInterval);
       }
     }, 100);
+
+    if (slashCommand.name == "enableAcc") {
+      dispatch(enableAcc())
+    } else if (slashCommand.name == "disableAcc") {
+      dispatch(disableAcc())
+    }
 
     for await (const update of extra.ideMessenger.streamRequest(
       "command/run",
