@@ -21,10 +21,28 @@ export class TabAutocompleteModel {
     this._llm = undefined;
   }
 
+  getCurrentFileDirectory(): string | undefined {
+    const activeEditor = vscode.window.activeTextEditor;
+    if (!activeEditor) {
+        vscode.window.showErrorMessage('No active editor found.');
+        return undefined;
+    }
+
+    const fileUri = activeEditor.document.uri;
+    if (fileUri.scheme !== 'file') {
+        vscode.window.showErrorMessage('The current file is not a local file.');
+        return undefined;
+    }
+
+    return fileUri.fsPath;
+  }
+
   async getDefaultTabAutocompleteModel() {
     const llm = new Ollama({
       model: "deepseek-coder:6.7b",
     });
+    llm.getCurrentFileDirectory = this.getCurrentFileDirectory;
+
     // await this.get_datastore_repo(llm);
 
     // const llm = new Ollama({

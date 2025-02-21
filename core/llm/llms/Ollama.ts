@@ -349,6 +349,9 @@ class Ollama extends BaseLLM {
     return new URL(endpoint, base);
   }
 
+  public getCurrentFileDirectory: (() => string | undefined) | undefined;
+  private curFile: string | undefined;
+
   protected async *_streamComplete(
     prompt: string,
     signal: AbortSignal,
@@ -361,6 +364,22 @@ class Ollama extends BaseLLM {
       processed_prompt = processed_prompt.substring(0, fimHoleIndex);
     }
 
+    let isNewFile:boolean = true;
+    if (this.getCurrentFileDirectory && this.getCurrentFileDirectory()) {
+      const lastFile = this.curFile;
+      console.log(lastFile);
+
+      this.curFile = this.getCurrentFileDirectory()
+      console.log(this.curFile);
+
+      if (lastFile == this.curFile) {
+        isNewFile = false;
+      }
+
+      console.log(isNewFile);
+      console.log("---");
+    }
+
     let response = await this.fetch(this.getEndpoint("run_service"), {
       method: "POST",
       headers: {
@@ -370,6 +389,7 @@ class Ollama extends BaseLLM {
       body: JSON.stringify({
         ...this._getGenerateOptions(options, processed_prompt), // 保留原有的字段
         useAcc: Ollama.useAccMethod,  // 直接添加 useAcc 字段
+        isNewFile: isNewFile,
       }),
       signal,
     });
