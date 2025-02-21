@@ -47,6 +47,7 @@ async function getWorkspaceRoot(ide: IDE): Promise<string | undefined> {
 }
 
 async function get_datastore_repo(ide: IDE) {
+  ide.showToast("info", "Begin to renew repo datastore ...");
   // 处理工作区中的所有目录
   const dir = await getWorkspaceRoot(ide);
   if (!dir) {
@@ -92,13 +93,15 @@ async function get_datastore_repo(ide: IDE) {
     },
   });
   console.log('Response from Python:', response3);
+
+  ide.showToast("info", "Repo datastore renewed successfully!");
 }
 
 const RenewRepoDatastoreCommand: SlashCommand = {
   name: "renew",
   description: "renew the repo datastore",
   run: async function* ({ ide, input }) {
-    await get_datastore_repo(ide);
+    get_datastore_repo(ide);
 
     console.log(input);
   },
