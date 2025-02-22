@@ -367,17 +367,17 @@ class Ollama extends BaseLLM {
     let isNewFile:boolean = true;
     if (this.getCurrentFileDirectory && this.getCurrentFileDirectory()) {
       const lastFile = this.curFile;
-      console.log(lastFile);
+      // console.log(lastFile);
 
       this.curFile = this.getCurrentFileDirectory()
-      console.log(this.curFile);
+      // console.log(this.curFile);
 
       if (lastFile == this.curFile) {
         isNewFile = false;
       }
 
-      console.log(isNewFile);
-      console.log("---");
+      // console.log(isNewFile);
+      // console.log("---");
     }
 
     let response = await this.fetch(this.getEndpoint("run_service"), {
@@ -403,6 +403,7 @@ class Ollama extends BaseLLM {
         body: JSON.stringify({
           ...this._getGenerateOptions(options, processed_prompt), // 保留原有的字段
           useAcc: Ollama.useAccMethod,  // 直接添加 useAcc 字段
+          isNewFile: isNewFile,
         }),
         signal,
       });
