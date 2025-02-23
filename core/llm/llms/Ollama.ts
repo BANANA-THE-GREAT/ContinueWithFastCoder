@@ -352,6 +352,10 @@ class Ollama extends BaseLLM {
   public getCurrentFileDirectory: (() => string | undefined) | undefined;
   private curFile: string | undefined;
 
+  private addMarksToNonWhitespace(str: string, markFront: string, markBack: string): string {
+    return str.replace(/\S+/g, (match) => `${markFront}${match}${markBack}`);
+  }
+
   protected async *_streamComplete(
     prompt: string,
     signal: AbortSignal,
@@ -445,13 +449,7 @@ class Ollama extends BaseLLM {
             }
             
             const originalString = j.token;
-            if (originalString.startsWith(" ")) {
-              yield " "  + mark_front + originalString.slice(1) + mark_back;
-            } else if (originalString.startsWith("\r")) {
-              yield "\r" + mark_front + originalString.slice(1) + mark_back;
-            } else {
-              yield mark_front + originalString + mark_back;
-            }
+            yield this.addMarksToNonWhitespace(originalString, mark_front, mark_back);
 
             // yield j.token;
           } catch (e) {
