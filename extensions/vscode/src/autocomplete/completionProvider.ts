@@ -269,7 +269,7 @@ export class ContinueCompletionProvider
       if (selectedCompletionInfo) {
         outcome.completion = selectedCompletionInfo.text + outcome.completion;
       }
-      outcome.completion = "<｜c> main():<c｜>Th<｜m>is is a sample text<m｜> for <｜d>wrapping<d｜>";
+      // outcome.completion = "<｜c> main():<c｜>Th<｜m>is is a sample text<m｜> for <｜d>wrapping<d｜>";
       const willDisplay = this.willDisplay(
         document,
         selectedCompletionInfo,
