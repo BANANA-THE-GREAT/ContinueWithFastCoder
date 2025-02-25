@@ -364,12 +364,30 @@ const getCommandsMap: (
   }
   return {
     "continue.enableGui": () => {
+      const editor = vscode.window.activeTextEditor;
+      let range;
+      if (editor) {
+        const selection = editor.selection;
+        range = new vscode.Range(selection.start, selection.end);
+        // console.log('Selected Range:', range);
+      }
       useGui = true;
-      enable();
+      if (range) {
+        enable(range);
+      }
     },
     "continue.disableGui": () => {
+      const editor = vscode.window.activeTextEditor;
+      let range;
+      if (editor) {
+        const selection = editor.selection;
+        range = new vscode.Range(selection.start, selection.end);
+        // console.log('Selected Range:', range);
+      }
       useGui = false;
-      disable();
+      if (range) {
+        disable(range);
+      }
     },
     "continue.acceptDiff": async (newFileUri?: string, streamId?: string) =>
       processDiff(
