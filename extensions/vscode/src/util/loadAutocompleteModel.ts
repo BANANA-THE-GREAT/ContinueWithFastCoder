@@ -42,6 +42,12 @@ export class TabAutocompleteModel {
       model: "deepseek-coder:6.7b",
     });
     llm.getCurrentFileDirectory = this.getCurrentFileDirectory;
+    await llm.fetch(llm.getEndpoint("init_cache"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
 
     // await this.get_datastore_repo(llm);
 

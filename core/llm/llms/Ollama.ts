@@ -342,7 +342,7 @@ class Ollama extends BaseLLM {
   getEndpoint(endpoint: string): URL {
     // let base = this.apiBase;
     // let base = "http://localhost:8000/";
-    let base = 'http://10.212.253.45:8000/run_service';
+    let base = 'http://10.212.253.45:8000/';
     if (process.env.IS_BINARY) {
       base = base?.replace("localhost", "127.0.0.1");
     }
@@ -351,17 +351,22 @@ class Ollama extends BaseLLM {
   }
 
   public getCurrentFileDirectory: (() => string | undefined) | undefined;
-  private curFile: string | undefined;
+  private curFile: string | undefined = undefined;
 
   private addMarksToNonWhitespace(str: string, markFront: string, markBack: string): string {
     return str.replace(/\S+/g, (match) => `${markFront}${match}${markBack}`);
   }
+
+  private request_id: number = 0;
 
   protected async *_streamComplete(
     prompt: string,
     signal: AbortSignal,
     options: CompletionOptions,
   ): AsyncGenerator<string> {
+    this.request_id = (this.request_id + 1) % 100007;
+    const my_id = this.request_id;
+
     // 删除特殊 token
     let processed_prompt = prompt.replace(/<｜fim▁begin｜>/g, '');
     const fimHoleIndex = processed_prompt.indexOf("<｜fim▁hole｜>");
@@ -371,6 +376,7 @@ class Ollama extends BaseLLM {
 
     let isNewFile:boolean = true;
     if (this.getCurrentFileDirectory && this.getCurrentFileDirectory()) {
+      console.log(this.curFile)
       const lastFile = this.curFile;
       // console.log(lastFile);
 
@@ -385,7 +391,7 @@ class Ollama extends BaseLLM {
       // console.log("---");
     }
 
-    let response = await this.fetch(this.getEndpoint("run_service"), {
+    const init: RequestInit = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -397,21 +403,20 @@ class Ollama extends BaseLLM {
         isNewFile: isNewFile,
       }),
       signal,
-    });
-    if (await response.text() == "busy") {
-      response = await this.fetch(this.getEndpoint("run_service"), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.apiKey}`,
-        },
-        body: JSON.stringify({
-          ...this._getGenerateOptions(options, processed_prompt), // 保留原有的字段
-          useAcc: Ollama.useAccMethod,  // 直接添加 useAcc 字段
-          isNewFile: isNewFile,
-        }),
-        signal,
-      });
+    };
+
+    let response = await this.fetch(this.getEndpoint("run_service"), init);
+    console.log("res1: ");
+    // console.log(response)
+    // console.log(await response.text())
+    while (!(response.body && response.headers.get('Content-Type') === 'application/json') && my_id == this.request_id) {
+      response = await this.fetch(this.getEndpoint("run_service"), init);
+      console.log("res2: ");
+    // console.log(response)
+    }
+    if (!(response.body && response.headers.get('Content-Type') === 'application/json')) {
+      console.log("ladaoba")
+      return;
     }
 
     let buffer = "";
