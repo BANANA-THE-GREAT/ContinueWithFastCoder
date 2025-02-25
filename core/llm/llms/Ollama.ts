@@ -341,7 +341,8 @@ class Ollama extends BaseLLM {
 
   getEndpoint(endpoint: string): URL {
     // let base = this.apiBase;
-    let base = "http://localhost:8000/";
+    // let base = "http://localhost:8000/";
+    let base = 'http://10.212.253.45:8000/run_service';
     if (process.env.IS_BINARY) {
       base = base?.replace("localhost", "127.0.0.1");
     }
