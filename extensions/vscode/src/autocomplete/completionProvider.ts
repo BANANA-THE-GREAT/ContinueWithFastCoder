@@ -46,12 +46,15 @@ export const decorationTypeForStore = vscode.window.createTextEditorDecorationTy
 
 export const decorationTypeForModel = vscode.window.createTextEditorDecorationType({
   fontStyle: 'italic', // 斜体
-  color: 'rgba(47, 255, 0, 0.75)', // 可选的颜色
+  color: 'rgba(0, 255, 179, 0.75)', // 可选的颜色
 });
 
 export let cacheRanges: { [filepath: string]: vscode.Range[] } = {};
 export let storeRanges: { [filepath: string]: vscode.Range[] } = {};
 export let modelRanges: { [filepath: string]: vscode.Range[] } = {};
+let guiCacheRanges: { [filepath: string]: vscode.Range[] } = {};
+let guiStoreRanges: { [filepath: string]: vscode.Range[] } = {};
+let guiModelRanges: { [filepath: string]: vscode.Range[] } = {};
 export let curFilePath: string = '';
 let group = 0;
 
@@ -266,7 +269,7 @@ export class ContinueCompletionProvider
       if (selectedCompletionInfo) {
         outcome.completion = selectedCompletionInfo.text + outcome.completion;
       }
-      // outcome.completion = "<｜c> main():<c｜>Th<｜m>is is a sample text<m｜> for <｜d>wrapping<d｜>";
+      outcome.completion = "<｜c> main():<c｜>Th<｜m>is is a sample text<m｜> for <｜d>wrapping<d｜>";
       const willDisplay = this.willDisplay(
         document,
         selectedCompletionInfo,
@@ -352,9 +355,9 @@ export class ContinueCompletionProvider
           arguments: [input.completionId, this.completionProvider],
         },
       );
+      curFilePath = outcome.filepath;
 
       //////////////////////////////////////////////
-      
       const editor = vscode.window.activeTextEditor;
       const workspaceFolder = vscode.workspace.workspaceFolders;
       let FilePath = '';
@@ -370,7 +373,7 @@ export class ContinueCompletionProvider
       // modelRanges = [];
       // storeRanges = [];
       // const autocompleteResults = autocompleteData.split('\n').map(line => JSON.parse(line));
-      curFilePath = outcome.filepath;
+      // curFilePath = outcome.filepath;
       if (!cacheRanges[curFilePath]) {
         cacheRanges[curFilePath] = [];
         modelRanges[curFilePath] = [];
@@ -384,7 +387,7 @@ export class ContinueCompletionProvider
         }
         // autocompleteResults = data.split('\n').map(line => JSON.parse(line));
         const lines = data.split('\n');
-        console.log("hello");
+        // console.log("hello");
         // 解析每一行为 JSON 对象
         for (let line of lines) {
             line = line.trim(); // 去除首尾空格
@@ -397,10 +400,10 @@ export class ContinueCompletionProvider
                 }
             }
         }
-        
+
         // 输出结果（调试用）
         // console.log(autocompleteResults);
-        autocompleteResults = autocompleteResults.filter((item:any) => 
+        autocompleteResults = autocompleteResults.filter((item:any) =>
           item.filepath === curFilePath && item.accepted === true
         );
 
@@ -413,7 +416,7 @@ export class ContinueCompletionProvider
               const start0 = editor.document.positionAt(item.fullPrefix.length);
               const end0 = editor.document.positionAt(item.fullPrefix.length + filteredCompletion.length);
               const range = new vscode.Range(start0, end0);
-              const isDuplicate = matchingRanges.some(r => 
+              const isDuplicate = matchingRanges.some(r =>
                  r.start.isEqual(range.start) && r.end.isEqual(range.end)
               );
               if (!isDuplicate) {
@@ -431,13 +434,13 @@ export class ContinueCompletionProvider
                 const nextNextNextChar = completionWithTags[i + 3];
                 if (char === '<' && nextChar === '｜' && nextNextChar === 'c' && nextNextNextChar === '>') {
                   group = 1;
-                  i += 3; 
+                  i += 3;
                 } else if (char === '<' && nextChar === '｜' && nextNextChar === 'd' && nextNextNextChar === '>') {
                   group = 2;
-                  i += 3; 
+                  i += 3;
                 } else if (char === '<' && nextChar === '｜' && nextNextChar === 'm' && nextNextNextChar === '>') {
                   group = 3;
-                  i += 3; 
+                  i += 3;
                 } else if (char === '<' && (nextChar === 'c' || nextChar === 'd' || nextChar === 'm') && nextNextChar === '｜' && nextNextNextChar === '>') {
                   end = editor.document.positionAt(editor.document.offsetAt(start) + distance);
                   const range = new vscode.Range(start, end);
@@ -456,7 +459,7 @@ export class ContinueCompletionProvider
                   }
                   start = end;
                   distance = 0;
-                  i += 3; 
+                  i += 3;
                 } else {
                   distance++;
                 }
@@ -483,29 +486,30 @@ export class ContinueCompletionProvider
             }
           }
         }
-    
+
         // 输出匹配的 range（调试用）
-        console.log(matchingRanges);
-  
-        if (editor) {
-          if (useGui) {
-            // editor.setDecorations(decorationTypeForCache, matchingRanges);
-            editor.setDecorations(decorationTypeForCache, cacheRanges[curFilePath]);
-            editor.setDecorations(decorationTypeForModel, modelRanges[curFilePath]);
-            editor.setDecorations(decorationTypeForStore, storeRanges[curFilePath]);
-          } else {
-            editor.setDecorations(decorationTypeForCache, []);
-            editor.setDecorations(decorationTypeForModel, []);
-            editor.setDecorations(decorationTypeForStore, []);
-          }
-        }
+        // console.log(matchingRanges);
+
+        // if (editor) {
+        //   if (useGui) {
+        //     // editor.setDecorations(decorationTypeForCache, matchingRanges);
+        //     editor.setDecorations(decorationTypeForCache, cacheRanges[curFilePath]);
+        //     editor.setDecorations(decorationTypeForModel, modelRanges[curFilePath]);
+        //     editor.setDecorations(decorationTypeForStore, storeRanges[curFilePath]);
+        //   } else {
+        //     editor.setDecorations(decorationTypeForCache, []);
+        //     editor.setDecorations(decorationTypeForModel, []);
+        //     editor.setDecorations(decorationTypeForStore, []);
+        //   }
+        // }
       }
     );
+
       // const autocompleteData = fs.readFileSync(autocompleteFilePath, 'utf-8');
-      
+
 
       //////////////////////////////////////////////
-      
+
       (completionItem as any).completeBracketPairs = true;
       return [completionItem];
     } finally {
@@ -574,20 +578,116 @@ function diffPatternMatches(
   return true;
 }
 
-export function enable(): void {
+// function processAutocompleteResults():void {
+
+// }
+
+export function enable(range: vscode.Range): void {
   const editor = vscode.window.activeTextEditor;
+  // processAutocompleteResults();
+  // curFilePath =
   if (editor) {
-    editor.setDecorations(decorationTypeForCache, cacheRanges[curFilePath]);
-    editor.setDecorations(decorationTypeForModel, modelRanges[curFilePath]);
-    editor.setDecorations(decorationTypeForStore, storeRanges[curFilePath]);
+    const filteredCacheRanges = filterRangesByIntersection(cacheRanges[curFilePath], range);
+    const filteredModelRanges = filterRangesByIntersection(modelRanges[curFilePath], range);
+    const filteredStoreRanges = filterRangesByIntersection(storeRanges[curFilePath], range);
+
+    guiCacheRanges[curFilePath] = mergeRanges(guiCacheRanges[curFilePath] || [], filteredCacheRanges);
+    guiModelRanges[curFilePath] = mergeRanges(guiModelRanges[curFilePath] || [], filteredModelRanges);
+    guiStoreRanges[curFilePath] = mergeRanges(guiStoreRanges[curFilePath] || [], filteredStoreRanges);
+
+    editor.setDecorations(decorationTypeForCache, guiCacheRanges[curFilePath]);
+    editor.setDecorations(decorationTypeForModel, guiModelRanges[curFilePath]);
+    editor.setDecorations(decorationTypeForStore, guiStoreRanges[curFilePath]);
   }
 }
 
-export function disable(): void {
+function mergeRanges(existingRanges: vscode.Range[], newRanges: vscode.Range[]): vscode.Range[] {
+  const allRanges = [...existingRanges, ...newRanges];
+  const sortedRanges = allRanges.sort((a, b) => a.start.compareTo(b.start));
+
+  const mergedRanges: vscode.Range[] = [];
+  for (const range of sortedRanges) {
+    if (mergedRanges.length === 0) {
+      mergedRanges.push(range);
+    } else {
+      const lastRange = mergedRanges[mergedRanges.length - 1];
+      if (range.start.isBefore(lastRange.end)) {
+        // 如果当前范围与最后一个合并范围有重叠，合并它们
+        mergedRanges[mergedRanges.length - 1] = new vscode.Range(
+          lastRange.start,
+          range.end.isAfter(lastRange.end) ? range.end : lastRange.end
+        );
+      } else {
+        // 否则，添加当前范围到合并范围数组
+        mergedRanges.push(range);
+      }
+    }
+  }
+
+  return mergedRanges;
+}
+
+function filterRangesByIntersection(ranges: vscode.Range[], targetRange: vscode.Range): vscode.Range[] {
+  return ranges.map(range => {
+    const intersection = range.intersection(targetRange);
+    if (!intersection) return undefined;
+
+    const start = range.start.isBefore(targetRange.start) ? targetRange.start : range.start;
+    const end = range.end.isAfter(targetRange.end) ? targetRange.end : range.end;
+
+    return new vscode.Range(start, end);
+  }).filter(range => range !== undefined) as vscode.Range[]; // 过滤掉 undefined
+}
+
+export function disable(range: vscode.Range): void {
+  const editor = vscode.window.activeTextEditor;
+  // processAutocompleteResults();
+  if (!editor) return;
+
+  guiCacheRanges[curFilePath] = removeIntersectingRanges(guiCacheRanges[curFilePath] || [], range);
+  guiModelRanges[curFilePath] = removeIntersectingRanges(guiModelRanges[curFilePath] || [], range);
+  guiStoreRanges[curFilePath] = removeIntersectingRanges(guiStoreRanges[curFilePath] || [], range);
+
+  editor.setDecorations(decorationTypeForCache, guiCacheRanges[curFilePath]);
+  editor.setDecorations(decorationTypeForModel, guiModelRanges[curFilePath]);
+  editor.setDecorations(decorationTypeForStore, guiStoreRanges[curFilePath]);
+}
+
+function removeIntersectingRanges(existingRanges: vscode.Range[], rangeToRemove: vscode.Range): vscode.Range[] {
+  return existingRanges.flatMap(existingRange => {
+    const intersection = existingRange.intersection(rangeToRemove);
+    if (!intersection) {
+      return [existingRange];
+    }
+
+    const resultRanges: vscode.Range[] = [];
+
+    if (existingRange.start.isBefore(rangeToRemove.start)) {
+      resultRanges.push(new vscode.Range(existingRange.start, rangeToRemove.start));
+    }
+
+    if (existingRange.end.isAfter(rangeToRemove.end)) {
+      resultRanges.push(new vscode.Range(rangeToRemove.end, existingRange.end));
+    }
+
+    return resultRanges;
+  });
+}
+
+export function disableAll(): void {
   const editor = vscode.window.activeTextEditor;
   if (editor) {
     editor.setDecorations(decorationTypeForCache, []);
     editor.setDecorations(decorationTypeForModel, []);
     editor.setDecorations(decorationTypeForStore, []);
+  }
+}
+
+export function enableAll(): void {
+  const editor = vscode.window.activeTextEditor;
+  if (editor) {
+    editor.setDecorations(decorationTypeForCache, cacheRanges[curFilePath]);
+    editor.setDecorations(decorationTypeForModel, modelRanges[curFilePath]);
+    editor.setDecorations(decorationTypeForStore, storeRanges[curFilePath]);
   }
 }
