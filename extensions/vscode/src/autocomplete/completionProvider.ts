@@ -358,7 +358,83 @@ export class ContinueCompletionProvider
       curFilePath = outcome.filepath;
 
       //////////////////////////////////////////////
-      const editor = vscode.window.activeTextEditor;
+
+
+      // const autocompleteData = fs.readFileSync(autocompleteFilePath, 'utf-8');
+
+
+      //////////////////////////////////////////////
+
+      (completionItem as any).completeBracketPairs = true;
+      return [completionItem];
+    } finally {
+      stopStatusBarLoading();
+    }
+  }
+
+  willDisplay(
+    document: vscode.TextDocument,
+    selectedCompletionInfo: vscode.SelectedCompletionInfo | undefined,
+    abortSignal: AbortSignal,
+    outcome: AutocompleteOutcome,
+  ): boolean {
+    if (selectedCompletionInfo) {
+      const { text, range } = selectedCompletionInfo;
+      if (!outcome.completion.startsWith(text)) {
+        console.log(
+          `Won't display completion because text doesn't match: ${text}, ${outcome.completion}`,
+          range,
+        );
+        return false;
+      }
+    }
+
+    if (abortSignal.aborted) {
+      return false;
+    }
+
+    return true;
+  }
+}
+
+function getDecorationRanges(document: vscode.TextDocument, matchingRanges: vscode.Range[]): vscode.DecorationOptions[] {
+  const decorations: vscode.DecorationOptions[] = [];
+  const lineCount = document.lineCount;
+
+  for (let i = 0; i < lineCount; i++) {
+      const line = document.lineAt(i);
+      const range = new vscode.Range(line.range.start, line.range.end);
+      decorations.push({ range });
+  }
+
+  return decorations;
+}
+
+type DiffPartType = "+" | "-" | "=";
+
+function diffPatternMatches(
+  diffs: DiffType[],
+  pattern: DiffPartType[],
+): boolean {
+  if (diffs.length !== pattern.length) {
+    return false;
+  }
+
+  for (let i = 0; i < diffs.length; i++) {
+    const diff = diffs[i];
+    const diffPartType: DiffPartType =
+      !diff.added && !diff.removed ? "=" : diff.added ? "+" : "-";
+
+    if (diffPartType !== pattern[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export function processAutocompleteResults():void {
+  const editor = vscode.window.activeTextEditor;
       const workspaceFolder = vscode.workspace.workspaceFolders;
       let FilePath = '';
       if (workspaceFolder && workspaceFolder.length > 0) {
@@ -380,14 +456,11 @@ export class ContinueCompletionProvider
         storeRanges[curFilePath] = [];
       }
       const curText = editor?.document.getText();
-      fs.readFile(autocompleteFilePath, 'utf-8', (err, data) => {
-        if (err) {
-            console.error('读取文件时发生错误:', err);
-            return;
-        }
+      const data = fs.readFileSync(autocompleteFilePath, 'utf-8');
+
         // autocompleteResults = data.split('\n').map(line => JSON.parse(line));
         const lines = data.split('\n');
-        // console.log("hello");
+        console.log("hello");
         // 解析每一行为 JSON 对象
         for (let line of lines) {
             line = line.trim(); // 去除首尾空格
@@ -502,90 +575,14 @@ export class ContinueCompletionProvider
         //     editor.setDecorations(decorationTypeForStore, []);
         //   }
         // }
-      }
-    );
 
-      // const autocompleteData = fs.readFileSync(autocompleteFilePath, 'utf-8');
-
-
-      //////////////////////////////////////////////
-
-      (completionItem as any).completeBracketPairs = true;
-      return [completionItem];
-    } finally {
-      stopStatusBarLoading();
-    }
-  }
-
-  willDisplay(
-    document: vscode.TextDocument,
-    selectedCompletionInfo: vscode.SelectedCompletionInfo | undefined,
-    abortSignal: AbortSignal,
-    outcome: AutocompleteOutcome,
-  ): boolean {
-    if (selectedCompletionInfo) {
-      const { text, range } = selectedCompletionInfo;
-      if (!outcome.completion.startsWith(text)) {
-        console.log(
-          `Won't display completion because text doesn't match: ${text}, ${outcome.completion}`,
-          range,
-        );
-        return false;
-      }
-    }
-
-    if (abortSignal.aborted) {
-      return false;
-    }
-
-    return true;
-  }
 }
-
-function getDecorationRanges(document: vscode.TextDocument, matchingRanges: vscode.Range[]): vscode.DecorationOptions[] {
-  const decorations: vscode.DecorationOptions[] = [];
-  const lineCount = document.lineCount;
-
-  for (let i = 0; i < lineCount; i++) {
-      const line = document.lineAt(i);
-      const range = new vscode.Range(line.range.start, line.range.end);
-      decorations.push({ range });
-  }
-
-  return decorations;
-}
-
-type DiffPartType = "+" | "-" | "=";
-
-function diffPatternMatches(
-  diffs: DiffType[],
-  pattern: DiffPartType[],
-): boolean {
-  if (diffs.length !== pattern.length) {
-    return false;
-  }
-
-  for (let i = 0; i < diffs.length; i++) {
-    const diff = diffs[i];
-    const diffPartType: DiffPartType =
-      !diff.added && !diff.removed ? "=" : diff.added ? "+" : "-";
-
-    if (diffPartType !== pattern[i]) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-// function processAutocompleteResults():void {
-
-// }
 
 export function enable(range: vscode.Range): void {
   const editor = vscode.window.activeTextEditor;
-  // processAutocompleteResults();
+  processAutocompleteResults();
   // curFilePath =
+  console.log(storeRanges[curFilePath]);
   if (editor) {
     const filteredCacheRanges = filterRangesByIntersection(cacheRanges[curFilePath], range);
     const filteredModelRanges = filterRangesByIntersection(modelRanges[curFilePath], range);
@@ -641,7 +638,7 @@ function filterRangesByIntersection(ranges: vscode.Range[], targetRange: vscode.
 
 export function disable(range: vscode.Range): void {
   const editor = vscode.window.activeTextEditor;
-  // processAutocompleteResults();
+  processAutocompleteResults();
   if (!editor) return;
 
   guiCacheRanges[curFilePath] = removeIntersectingRanges(guiCacheRanges[curFilePath] || [], range);
