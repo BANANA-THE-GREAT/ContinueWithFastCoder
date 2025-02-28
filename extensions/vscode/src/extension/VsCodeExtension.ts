@@ -93,6 +93,37 @@ export class VsCodeExtension {
       this.extensionContext,
     );
 
+    //clear autocompleteFile
+    const path = require('path');
+    let open = false;
+    context.subscriptions.push(
+      vscode.workspace.onDidOpenTextDocument((document) => {
+        if (open === true) {
+            return;
+        } else {
+          const workspaceFolder = vscode.workspace.workspaceFolders;
+          let FilePath = '';
+          if (workspaceFolder && workspaceFolder.length > 0) {
+            FilePath = workspaceFolder[0].uri.fsPath;
+          } else {
+            console.log("there is no workspace dir");
+          }
+          const filePath = path.join(vscode.workspace.rootPath, 'path/to/your/file.txt');
+
+          let filepath = FilePath;
+
+          const jsonlFilename = `.autocomplete.jsonl`; // 添加 .jsonl 扩展名
+          const jsonlFilePath = path.join(filepath, jsonlFilename);
+          const directory = path.dirname(jsonlFilePath);
+          if (!fs.existsSync(directory)) {
+            fs.mkdirSync(directory, { recursive: true });
+          }
+          fs.writeFileSync(jsonlFilePath, '');
+          open = true;
+        }
+      })
+  );
+
     // Sidebar
     context.subscriptions.push(
       vscode.window.registerWebviewViewProvider(
