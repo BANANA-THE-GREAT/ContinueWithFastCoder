@@ -34,19 +34,22 @@ import { C } from "core/autocomplete/constants/AutocompleteLanguageInfo";
 const Diff = require("diff");
 const decoratedRanges = new Map<vscode.TextEditor, vscode.Range[]>();
 
-export const decorationTypeForCache = vscode.window.createTextEditorDecorationType({
+const decorationTypeForCache = vscode.window.createTextEditorDecorationType({
   fontStyle: 'italic', // 斜体
-  color: 'rgba(255, 166, 0, 0.75)', // 可选的颜色
+  fontWeight: 'bold', 
+  color: 'rgba(0, 83, 200, 0.9)', // 可选的颜色
 });
 
-export const decorationTypeForStore = vscode.window.createTextEditorDecorationType({
+const decorationTypeForStore = vscode.window.createTextEditorDecorationType({
   fontStyle: 'italic', // 斜体
-  color: 'rgba(255, 17, 0, 0.83)', // 可选的颜色
+  fontWeight: 'bold', 
+  color: 'rgba(200, 30, 30, 0.9)', // 可选的颜色
 });
 
-export const decorationTypeForModel = vscode.window.createTextEditorDecorationType({
+const decorationTypeForModel = vscode.window.createTextEditorDecorationType({
   fontStyle: 'italic', // 斜体
-  color: 'rgba(0, 255, 179, 0.75)', // 可选的颜色
+  fontWeight: 'bold', 
+  color: 'rgba(0, 120, 100, 0.9)', // 可选的颜色
 });
 
 export let cacheRanges: { [filepath: string]: vscode.Range[] } = {};
