@@ -13,6 +13,7 @@
     "prettier-plugin-tailwindcss": "^0.6.8"
   },
   "dependencies": {
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "vite-plugin-svgr": "^4.3.0"
   }
 }
