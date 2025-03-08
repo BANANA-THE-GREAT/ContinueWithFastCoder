@@ -172,6 +172,7 @@ function loadSerializedConfig(
       ? [...defaultSlashCommandsVscode]
       : [...defaultSlashCommandsJetBrains];
 
+  config.slashCommands.length = 0;
   config.slashCommands.push({
     name: "renew",
     description: "renew the repo datastore",

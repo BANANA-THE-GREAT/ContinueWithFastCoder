@@ -566,9 +566,11 @@ function TipTapEditor(props: TipTapEditorProps) {
       return placeholder;
     }
 
-    return historyLength === 0
-      ? "Ask anything, '@' to add context"
-      : "Ask a follow-up";
+    // return historyLength === 0
+    //   ? "Ask anything, '@' to add context"
+    //   : "Ask a follow-up";
+
+    return "Type '/' to show command list";
   }
 
   useEffect(() => {
@@ -999,7 +1001,7 @@ function TipTapEditor(props: TipTapEditorProps) {
             event.stopPropagation();
           }}
         />
-        <InputToolbar
+        {/* <InputToolbar
           toolbarOptions={props.toolbarOptions}
           activeKey={activeKey}
           hidden={shouldHideToolbar && !props.isMainInput}
@@ -1023,7 +1025,11 @@ function TipTapEditor(props: TipTapEditorProps) {
             });
           }}
           disabled={isStreaming}
-        />
+        /> */}
+
+        {
+          <p></p>
+        }
       </PaddingDiv>
 
       {showDragOverMsg &&

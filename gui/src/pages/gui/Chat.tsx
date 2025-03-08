@@ -367,15 +367,16 @@ export function Chat() {
       {widget}
       <StepsDiv
         ref={stepsDivRef}
-        className={`overflow-y-scroll pt-[8px] ${showScrollbar ? "thin-scrollbar" : "no-scrollbar"} ${history.length > 0 ? "flex-1" : ""}`}
+        // className={`overflow-y-scroll pt-[8px] ${showScrollbar ? "thin-scrollbar" : "no-scrollbar"} ${history.length > 0 ? "flex-1" : ""}`}
+        className={`overflow-y-scroll pt-[8px] ${showScrollbar ? "thin-scrollbar" : "no-scrollbar"}`}
       >
         {highlights}
-        {history.map((item, index: number) => (
+        {history.map((item, index: number) => ( index % 2 != 0 ? null :
           <div
             key={item.message.id}
-            style={{
-              minHeight: index === history.length - 1 ? "25vh" : 0,
-            }}
+            // style={{
+            //   minHeight: index === history.length - 1 ? "25vh" : 0,
+            // }}
           >
             <ErrorBoundary
               FallbackComponent={fallbackRender}
@@ -483,7 +484,7 @@ export function Chat() {
 
         {isInEditMode && history.length === 0 && <CodeToEditCard />}
 
-        {isInEditMode && history.length > 0 ? null : (
+        {isInEditMode || history.length > 0 ? null : (
           <ContinueInputBox
             isMainInput
             isEditMode={isInEditMode}
@@ -538,14 +539,14 @@ export function Chat() {
             />
           )}
 
-          {history.length === 0 && (
+          {(
             <>
               {onboardingCard.show && (
                 <div className="mx-2 mt-10">
                   {usePlatform ? (
                     <PlatformOnboardingCard />
                   ) : (
-                    <OnboardingCard />
+                    <OnboardingCard />  // this
                   )}
                 </div>
               )}

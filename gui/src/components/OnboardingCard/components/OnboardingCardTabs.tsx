@@ -74,7 +74,10 @@ export function OnboardingCardTabs({
       <div className="xs:block hidden">
         <TabList>
           {Object.entries(TabTitles).map(([tabType, titles]) => {
-            if (hasPassedFTL() && tabType === "Quickstart") {
+            // if (hasPassedFTL() && tabType === "Quickstart") {
+            //   return undefined;
+            // }
+            if (tabType != "Quickstart") {
               return undefined;
             }
 
