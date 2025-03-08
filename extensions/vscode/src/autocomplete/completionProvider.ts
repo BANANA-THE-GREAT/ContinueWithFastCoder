@@ -38,18 +38,21 @@ const decorationTypeForCache = vscode.window.createTextEditorDecorationType({
   fontStyle: 'italic', // 斜体
   fontWeight: 'bold', 
   color: 'rgba(0, 83, 200, 0.9)', // 可选的颜色
+  rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
 });
 
 const decorationTypeForStore = vscode.window.createTextEditorDecorationType({
   fontStyle: 'italic', // 斜体
   fontWeight: 'bold', 
   color: 'rgba(200, 30, 30, 0.9)', // 可选的颜色
+  rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
 });
 
 const decorationTypeForModel = vscode.window.createTextEditorDecorationType({
   fontStyle: 'italic', // 斜体
   fontWeight: 'bold', 
   color: 'rgba(0, 120, 100, 0.9)', // 可选的颜色
+  rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
 });
 
 export let cacheRanges: { [filepath: string]: vscode.Range[] } = {};
@@ -648,6 +651,10 @@ export function disable(range: vscode.Range): void {
   guiCacheRanges[curFilePath] = removeIntersectingRanges(guiCacheRanges[curFilePath] || [], range);
   guiModelRanges[curFilePath] = removeIntersectingRanges(guiModelRanges[curFilePath] || [], range);
   guiStoreRanges[curFilePath] = removeIntersectingRanges(guiStoreRanges[curFilePath] || [], range);
+
+  // console.log(guiCacheRanges[curFilePath]);
+  // console.log(guiModelRanges[curFilePath]);
+  // console.log(guiStoreRanges[curFilePath]);
 
   editor.setDecorations(decorationTypeForCache, guiCacheRanges[curFilePath]);
   editor.setDecorations(decorationTypeForModel, guiModelRanges[curFilePath]);
