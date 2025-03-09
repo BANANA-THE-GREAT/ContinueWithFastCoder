@@ -53,6 +53,8 @@ function OnboardingQuickstartTab() {
           <br/>
           显示选中部分补全过程中的来源
           <br/>
+          【快捷键：<code>ctrl + E</code>】
+          <br/>
           <span style={{ color: 'rgba(0, 83, 200, 0.9)' }}>蓝色表示来自缓存</span>
           <br/>
           <span style={{ color: 'rgba(0, 120, 100, 0.9)' }}>绿色表示来自检索库</span>
@@ -64,7 +66,12 @@ function OnboardingQuickstartTab() {
           <code>Enable displaying code sourse</code>
           <br/>
           取消选中部分的来源显示
+          <br/>
+          【快捷键：<code>ctrl + N</code>】
         </p>
+        
+        <br/>
+        <hr className="w-full  mt-4" />
       </div>
     </div>
   );

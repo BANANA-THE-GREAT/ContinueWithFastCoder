@@ -62,12 +62,9 @@
 //   );
 // }
 
-import logoJpeg from "../../assets/logo_cn.png"; // 确认路径正确
-
 export default function ContinueLogo() {
   return (
     <div>
-      {/* 基础测试 */}
       <img src="https://i.ibb.co/m3TtBG0/logo-cn.png" alt="1"/>
       {/* <img src="https://i.ibb.co/gFmtYZ1F/logo-en.png" alt="1"/> */}
     </div>

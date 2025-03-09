@@ -570,7 +570,8 @@ function TipTapEditor(props: TipTapEditorProps) {
     //   ? "Ask anything, '@' to add context"
     //   : "Ask a follow-up";
 
-    return "Type '/' to show command list";
+    // return "Type '/' to show command list";
+    return "输入 '/' 以显示指令列表";
   }
 
   useEffect(() => {

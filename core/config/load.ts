@@ -175,15 +175,16 @@ function loadSerializedConfig(
   config.slashCommands.length = 0;
   config.slashCommands.push({
     name: "renew",
-    description: "renew the repo datastore",
+    description: "重新构建仓库代码检索库",
   });
   config.slashCommands.push({
     name: "enableAcc",
-    description: "enable the acceleration method",
+    description: "开启加速方法",
   });
   config.slashCommands.push({
     name: "disableAcc",
-    description: "disable the acceleration method",
+    // description: "disable the acceleration method",
+    description: "关闭加速方法",
   });
 
   // Temporarily disabling this check until we can verify the commands are accuarate

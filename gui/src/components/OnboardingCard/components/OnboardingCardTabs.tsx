@@ -77,9 +77,9 @@ export function OnboardingCardTabs({
             // if (hasPassedFTL() && tabType === "Quickstart") {
             //   return undefined;
             // }
-            if (tabType != "Quickstart") {
+            // if (tabType != "Quickstart") {
               return undefined;
-            }
+            // }
 
             return (
               <TabButton
