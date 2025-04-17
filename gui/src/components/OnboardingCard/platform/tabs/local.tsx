@@ -9,7 +9,7 @@ export default function LocalTab() {
   return (
     <div className="xs:px-0 flex w-full max-w-full flex-col items-center justify-center px-4 text-center">
       <div className="xs:flex hidden">
-        <ContinueLogo height={75} />
+        <ContinueLogo />
       </div>
 
       <p className="xs:w-3/4 w-full text-sm">

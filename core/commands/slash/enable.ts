@@ -7,7 +7,8 @@ const EnableAccelerationMethodCommand: SlashCommand = {
   run: async function* ({ ide, input }) {
     Ollama.enableAcc();
     console.log(input);
-    ide.showToast("info", "Acceleration method enabled successfully");
+    // ide.showToast("info", "Acceleration method enabled successfully");
+    ide.showToast("info", "加速方法已开启");
   },
 };
 
