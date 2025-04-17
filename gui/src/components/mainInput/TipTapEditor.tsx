@@ -570,7 +570,7 @@ function TipTapEditor(props: TipTapEditorProps) {
     //   ? "Ask anything, '@' to add context"
     //   : "Ask a follow-up";
 
-    return "Ask anything, '@' to add context or Type '/' to show command list";
+    return "Ask anything, Type '/' to show command list";
   }
 
   useEffect(() => {
@@ -1027,9 +1027,9 @@ function TipTapEditor(props: TipTapEditorProps) {
           disabled={isStreaming}
         /> }
 
-        {
+        {/* {
           <p></p>
-        }
+        } */}
       </PaddingDiv>
 
       {showDragOverMsg &&
