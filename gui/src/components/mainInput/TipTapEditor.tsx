@@ -1002,7 +1002,7 @@ function TipTapEditor(props: TipTapEditorProps) {
             event.stopPropagation();
           }}
         />
-        {/* <InputToolbar
+        {<InputToolbar
           toolbarOptions={props.toolbarOptions}
           activeKey={activeKey}
           hidden={shouldHideToolbar && !props.isMainInput}
@@ -1026,11 +1026,11 @@ function TipTapEditor(props: TipTapEditorProps) {
             });
           }}
           disabled={isStreaming}
-        /> */}
+        /> }
 
-        {
+        {/* {
           <p></p>
-        }
+        } */}
       </PaddingDiv>
 
       {showDragOverMsg &&
