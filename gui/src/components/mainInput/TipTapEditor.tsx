@@ -555,7 +555,7 @@ function TipTapEditor(props: TipTapEditorProps) {
 
   const [shouldHideToolbar, setShouldHideToolbar] = useState(false);
   const debouncedShouldHideToolbar = debounce((value) => {
-    setShouldHideToolbar(value);
+    setShouldHideToolbar(true);
   }, 200);
 
   function getPlaceholderText(
@@ -570,8 +570,8 @@ function TipTapEditor(props: TipTapEditorProps) {
     //   ? "Ask anything, '@' to add context"
     //   : "Ask a follow-up";
 
-    // return "Type '/' to show command list";
-    return "输入 '/' 以显示指令列表";
+    return "Type '/' to show command list";
+    // return "输入 '/' 以显示指令列表";
   }
 
   useEffect(() => {
@@ -599,7 +599,7 @@ function TipTapEditor(props: TipTapEditorProps) {
   useEffect(() => {
     if (editor) {
       const handleFocus = () => {
-        debouncedShouldHideToolbar(false);
+        debouncedShouldHideToolbar(true);
       };
 
       const handleBlur = () => {
@@ -1002,7 +1002,7 @@ function TipTapEditor(props: TipTapEditorProps) {
             event.stopPropagation();
           }}
         />
-        {<InputToolbar
+        {/* {<InputToolbar
           toolbarOptions={props.toolbarOptions}
           activeKey={activeKey}
           hidden={shouldHideToolbar && !props.isMainInput}
@@ -1026,7 +1026,7 @@ function TipTapEditor(props: TipTapEditorProps) {
             });
           }}
           disabled={isStreaming}
-        /> }
+        /> } */<br/>}
 
         {/* {
           <p></p>

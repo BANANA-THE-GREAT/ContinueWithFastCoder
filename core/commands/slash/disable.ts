@@ -7,8 +7,8 @@ const DisableAccelerationMethodCommand: SlashCommand = {
   run: async function* ({ ide, input }) {
     Ollama.disableAcc();
     console.log(input);
-    // ide.showToast("info", "Acceleration method disabled successfully");
-    ide.showToast("info", "加速方法已关闭");
+    ide.showToast("info", "Acceleration method disabled successfully");
+    // ide.showToast("info", "加速方法已关闭");
   },
 };
 

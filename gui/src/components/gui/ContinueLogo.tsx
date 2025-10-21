@@ -65,8 +65,10 @@
 export default function ContinueLogo() {
   return (
     <div>
-      <img src="https://i.ibb.co/m3TtBG0/logo-cn.png" alt="1"/>
-      {/* <img src="https://i.ibb.co/gFmtYZ1F/logo-en.png" alt="1"/> */}
+      <br/>
+      {/* <img src="https://i.ibb.co/m3TtBG0/logo-cn.png" alt="1"/> */}
+      <img src="https://i.ibb.co/gFmtYZ1F/logo-en.png" alt="1" style={{ width: '75%', height: 'auto' }}/>
+      <br/>
     </div>
   );
 }
