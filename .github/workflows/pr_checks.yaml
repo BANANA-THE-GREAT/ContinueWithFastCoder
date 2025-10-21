@@ -493,7 +493,7 @@ jobs:
           key: ${{ runner.os }}-core-node-modules-${{ hashFiles('core/package-lock.json') }}
 
       - name: Setup Java
-        uses: actions/setup-java@v4.5.0
+        uses: actions/setup-java@v5
         with:
           distribution: zulu
           java-version: 17
