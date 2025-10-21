@@ -1,0 +1,66 @@
+repo:
+accept_lengths_tree_average:  1.7570362081960766
+accept_lengths_tree_average_micro:  1.6750675837525237
+avg_time_per_token:  0.019609679
+avg_time_per_token_micro:  0.01967975201508705
+******************************
+
+
+small-deepseek:
+accept_lengths_tree_average:  1.9303707698197294                                                                                                                                                              │
+accept_lengths_tree_average_micro:  1.896346283620939                                                                                                                                                                     │
+avg_time_per_token:  0.02130684                                                                                                                                                                                           │
+avg_time_per_token_micro:  0.021317829848581795    
+
+
+parallel:
+small-deepseek:
+accept_lengths_tree_average:  2.1559967758892724
+accept_lengths_tree_average_micro:  2.0900342906129445
+avg_time_per_token:  0.01908328
+avg_time_per_token_micro:  0.019283801016199927
+******************************
+
+
+
+
+
+
+codellama+first5stack+parallel:
+accept_lengths_tree_average:  2.1853911544694418
+accept_lengths_tree_average_micro:  2.147553582102297
+avg_time_per_token:  0.033057075
+avg_time_per_token_micro:  0.03310399391305138
+******************************
+
+
+codellama+first5stack:
+accept_lengths_tree_average:  1.9957266340647843
+accept_lengths_tree_average_micro:  1.959570571272699
+avg_time_per_token:  0.019383583
+avg_time_per_token_micro:  0.019406781150083024
+******************************
+
+
+codellama+first2stack+parallel:
+accept_lengths_tree_average:  2.042340107880304
+accept_lengths_tree_average_micro:  2.004963916909214
+avg_time_per_token:  0.02403862
+avg_time_per_token_micro:  0.024116904389480963
+******************************
+
+
+codellama+first1stack+parallel:
+accept_lengths_tree_average:  1.8823134939922337
+accept_lengths_tree_average_micro:  1.849873990544692
+avg_time_per_token:  0.021144303
+avg_time_per_token_micro:  0.021222259051840484
+******************************
+
+
+codellama+first1stack:
+accept_lengths_tree_average:  1.8820796334106127
+accept_lengths_tree_average_micro:  1.8504308840012496
+avg_time_per_token:  0.019381596
+avg_time_per_token_micro:  0.019428610564949635
+******************************

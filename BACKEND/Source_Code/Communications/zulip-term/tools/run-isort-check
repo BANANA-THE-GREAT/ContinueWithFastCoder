@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+
+import subprocess
+import sys
+
+
+cmds = ["isort"]
+files = ["zulipterminal", "tests", "tools", "setup.py"]
+
+result = subprocess.call(cmds + ["--check-only", "--diff"] + files)
+
+if result == 0:
+    print("All files have imports sorted according to rules.")
+else:
+    print("Some files are not sorted according to rules.")
+    print("Try 'isort <path>' to fix a path recursively.")
+
+sys.exit(result)

@@ -1,0 +1,14 @@
+codecov:
+  # baseline branch
+  branch: main
+
+comment: off
+
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 0.85
+        base: auto
+    patch: off

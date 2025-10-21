@@ -1,0 +1,29 @@
+Licenses
+========
+
+The whole ``aioxmpp`` is distributed under the LGPLv3. See ``COPYING.gpl3`` together with ``COPYING.LESSER`` for the full license text.
+
+Dependencies
+------------
+
+The licenses of the dependencies shall be listed here, too:
+
+* ``pyOpenSSL`` uses Apache 2.0 (see ``docs/licenses/apache20.txt``)
+
+* ``pyasn1`` and ``pyasn1_modules`` use 2-clause BSD (see
+  ``docs/licenses/pyasn1.txt``)
+
+* ``dnspython`` uses a BSD-ish license (see ``docs/licenses/dnspython.txt``)
+
+* ``orderedset`` and ``lxml`` use 3-clause BSD (see
+  ``docs/licenses/orderedset.txt``, ``docs/licenses/lxml.txt``)
+
+* ``tzlocal`` is in the public domain (via CC0 license)
+
+* ``libxml2`` uses the Expat MIT license (see ``docs/licenses/libxml2.txt``)
+
+* ``multidict`` uses the Apache 2.0 license (see ``docs/licenses/apache20.txt``)
+
+* ``aiosasl`` uses the LGPLv3 license (see ``COPYING.gpl3`` and ``COPYING.LESSER``)
+
+* ``aioopenssl`` uses the Apache 2.0 license (see ``docs/licenses/apache20.txt``)

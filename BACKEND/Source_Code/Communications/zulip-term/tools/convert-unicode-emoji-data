@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+
+# Convert emoji file downloaded using tools/fetch-unicode-emoji-data
+# into what is required by ZT.
+
+from collections import OrderedDict
+from pathlib import Path, PurePath
+
+
+try:
+    from zulipterminal.unicode_emoji_dict import EMOJI_NAME_MAPS
+except ModuleNotFoundError:
+    print(
+        "ERROR: Could not find downloaded unicode emoji\n"
+        "Try fetching the unicode first using tools/fetch-unicode-emojis-data"
+    )
+    exit(1)
+
+WORKING_FOLDER = Path(__file__).resolve().parent.parent / "zulipterminal"
+INPUT_FILE = WORKING_FOLDER / "unicode_emoji_dict.py"
+OUTPUT_FILE = WORKING_FOLDER / "unicode_emojis.py"
+
+SCRIPT_NAME = PurePath(__file__).name
+
+emoji_dict = EMOJI_NAME_MAPS
+
+emoji_map = {}
+for emoji_code, emoji_data in emoji_dict.items():
+    emoji_map[emoji_data["canonical_name"]] = {
+        "code": emoji_code,
+        "aliases": emoji_data["aliases"],
+    }
+
+ordered_emojis = OrderedDict(sorted(emoji_map.items()))
+
+with OUTPUT_FILE.open("w") as f:
+    f.write(
+        "from collections import OrderedDict\n\n\n"
+        "# fmt: off\n"
+        f"# Generated automatically by tools/{SCRIPT_NAME}\n"
+        "# Do not modify.\n\n"
+        "EMOJI_DATA = OrderedDict(\n    [\n"
+    )
+    for emoji_name, emoji in ordered_emojis.items():
+        # {'smile': {'code': '263a', 'aliases': []}}
+        f.write(f'        ("{emoji_name}", {emoji}),\n')
+    f.write("    ]\n)\n# fmt: on\n")
+
+print(f"Emoji list saved in {OUTPUT_FILE}")
+
+try:
+    INPUT_FILE.unlink()
+    print(f"{INPUT_FILE} deleted.")
+except Exception as exc:
+    print("Warning: Could not delete file:\n{exc}")

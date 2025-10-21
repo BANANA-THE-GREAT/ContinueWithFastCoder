@@ -1,0 +1,6 @@
+accept_lengths_tree_average: 2.6879619835796387
+accept_lengths_tree_average_micro: 2.646076002740737
+avg_time_per_token: 0.012757702730596066
+avg_time_per_token_micro: 0.012580353205407837
+******************************
+

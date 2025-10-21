@@ -1,0 +1,14 @@
+Sphinx>=1.8.0
+mock
+pytest
+pytest-cov
+aiounittest
+flake8
+wheel>=0.22.0
+cryptography
+recommonmark
+django
+multidict
+pyngrok
+black
+autoflake

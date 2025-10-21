@@ -1,0 +1,10 @@
+[[source]]
+verify_ssl = true
+url = "https://pypi.python.org/simple"
+name = "pypi"
+
+[packages]
+zulip-term = {editable = true, path="."}
+
+[dev-packages]
+zulip-term = {editable = true, extras=["dev"], path="."}
