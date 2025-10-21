@@ -1,0 +1,124 @@
+
+EH Forwarder Bot
+================
+
+.. only:: not latex
+
+    :Versions:
+        .. image:: https://img.shields.io/badge/Python->%3D%203.6-blue.svg
+           :alt: Python >= 3.6
+           :target: https://www.python.org/
+        .. image:: https://img.shields.io/pypi/v/ehforwarderbot.svg
+           :alt: PyPI release
+           :target: https://pypi.org/project/ehforwarderbot/
+    :Build:
+        .. image:: https://readthedocs.org/projects/ehforwarderbot/badge/?version=latest
+           :alt: Documentation
+           :target: https://ehforwarderbot.readthedocs.io/en/latest/
+        .. image:: https://github.com/ehForwarderBot/ehforwarderbot/workflows/Tests/badge.svg
+           :alt: Tests status
+           :target: https://github.com/ehForwarderBot/ehforwarderbot/actions
+    :Community:
+        .. image:: https://img.shields.io/badge/GitHub-Discussions-lightgrey?logo=github
+           :alt: GitHub Discussions
+           :target: https://github.com/ehForwarderBot/ehForwarderBot/discussions
+        .. image:: https://img.shields.io/badge/-Telegram-blue.svg?logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI2ZmZiIgZD0iTTkuNzgsMTguNjVMMTAuMDYsMTQuNDJMMTcuNzQsNy41QzE4LjA4LDcuMTkgMTcuNjcsNy4wNCAxNy4yMiw3LjMxTDcuNzQsMTMuM0wzLjY0LDEyQzIuNzYsMTEuNzUgMi43NSwxMS4xNCAzLjg0LDEwLjdMMTkuODEsNC41NEMyMC41NCw0LjIxIDIxLjI0LDQuNzIgMjAuOTYsNS44NEwxOC4yNCwxOC42NUMxOC4wNSwxOS41NiAxNy41LDE5Ljc4IDE2Ljc0LDE5LjM2TDEyLjYsMTYuM0wxMC42MSwxOC4yM0MxMC4zOCwxOC40NiAxMC4xOSwxOC42NSA5Ljc4LDE4LjY1WiIgLz48L3N2Zz4=
+           :alt: Telegram
+           :target: https://telegram.me/efbsupport
+    :Stats:
+        .. image:: https://pepy.tech/badge/ehforwarderbot/month
+           :alt: Downloads per month
+           :target: https://pepy.tech/project/ehforwarderbot
+        .. image:: https://img.shields.io/codacy/grade/3b2555f9134844e3b01b00700bc43eeb.svg
+           :alt: Codacy grade
+           :target: https://www.codacy.com/app/blueset/ehForwarderBot
+        .. image:: https://d322cqt584bo4o.cloudfront.net/ehforwarderbot/localized.svg
+           :alt: Translate this project
+           :target: https://crowdin.com/project/ehforwarderbot/
+
+
+.. image:: https://raw.githubusercontent.com/blueset/ehForwarderBot/master/banner.png
+   :alt: Banner
+
+
+*Codename* **EH Forwarder Bot** (EFB) is an extensible message tunneling chat
+bot framework which delivers messages to and from multiple platforms and
+remotely control your accounts.
+
+
+.. toctree::
+    :titlesonly:
+    :maxdepth: 1
+
+    getting-started
+    config
+    start
+    directories
+    profile
+    support
+    guide/walkthrough
+    guide/index
+    contributing
+    API/index
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+
+Feel like contributing?
+=======================
+
+Everyone is welcomed to raise an issue or submit a pull request,
+just remember to read through and follow the
+:doc:`contribution guideline <./contributing>` before you do so.
+
+
+Related articles
+================
+
+* `Idea: Group Chat Tunneling (Sync) with EH Forwarder Bot`_
+* `What’s so new in EH Forwarder Bot 2 (and its modules)`_
+
+For tips, tricks and community contributed articles, see `project wiki`_.
+
+.. _project wiki: https://efb.1a23.studio/wiki
+.. _Idea\: Group Chat Tunneling (Sync) with EH Forwarder Bot: https://blog.1a23.com/2017/01/28/Idea-Group-Chat-Tunneling-Sync-with-EH-Forwarder-Bot/
+.. _What’s so new in EH Forwarder Bot 2 (and its modules): https://blog.1a23.com/2018/02/28/What%E2%80%99s-so-new-in-EH-Forwarder-Bot-2-and-its-modules/
+
+License
+=======
+
+EFB framework is licensed under `GNU Affero General Public License 3.0`_
+or later versions.
+
+.. code-block:: text
+
+    EH Forwarder Bot: An extensible message tunneling chat bot framework.
+    Copyright (C) 2016 - 2020 Eana Hufwe, and the EH Forwarder Bot contributors
+    All rights reserved.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+:doc:`Donate <donate>`.
+
+.. _Install and enable channels: https://ehforwarderbot.readthedocs.io/en/efb2/getting-started.html
+.. _channels repository: https://efb-modules.1a23.studio
+.. _Documentation: https://ehforwarderbot.readthedocs.io/en/efb2/
+.. _GNU Affero General Public License 3.0: https://www.gnu.org/licenses/agpl-3.0.txt

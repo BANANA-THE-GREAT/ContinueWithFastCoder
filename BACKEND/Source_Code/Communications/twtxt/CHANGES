@@ -1,0 +1,64 @@
+Changelog
+=========
+
+These are all the changes in twtxt since the first public release.
+
+1.3.0
+-----
+
+- Bumped all dependencies
+- Python >= 3.7 is now supported
+
+1.2.3
+-----
+
+- No changes, just new version number because of PyPI problems
+
+1.2.2
+-----
+
+- Fixed two minor bugs in cli.py
+- Adopt to 2.x changes in aiohttp
+
+1.2.1
+-----
+
+- Fixed a bug in the mention handling code
+- Nicks are now case-insensitive throughout twtxt
+- Added a character_limit option, to specify when to shorten tweets
+- Added option to include user’s nick and url in twtxt’s user-agent string for greater discovery
+
+1.2.0
+-----
+
+- twtxt package is now executable
+- twtxt is now available as wheel archive
+- Check status of feed before following a new source
+- Added a source option to timeline command to only show one specific source
+- Added a view command which is basically an alias for the source option
+- Added support for local caching of remote twtxt files
+- Added support for mentions, see README.rst for more information
+- Added a pre_tweet_hook option, works like post_tweet_hook
+- Added a porcelain option, styles output script-friendly
+
+1.1.0
+-----
+
+- Ignore status updates coming form the future.
+- Improved timestamp format by by removing microseconds and using local time.
+- Get confirmation before overwriting an existing source.
+- Allow tweet command to read from stdin. (echo "Test" | twtxt tweet)
+- Allow tweet command to accept unlimited amount of arguments. (twtxt tweet This is  also valid)
+- Added an option to change the timeline sorting.
+- Added an option to specify max wait time for HTTP requests.
+
+
+1.0.1
+-----
+
+- use subprocess.call() instead of subprocess.run() which is Python 3.5 only.
+
+1.0.0
+-----
+
+Initial public release.

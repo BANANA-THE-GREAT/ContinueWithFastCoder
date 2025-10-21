@@ -1,0 +1,12 @@
+dist: bionic
+language: python
+cache: pip
+python:
+  - 3.6
+  - 3.7
+  - 3.8
+install:
+  - pip install -Ue '.[tests]'
+script:
+  - mypy -p ehforwarderbot
+  - pytest -vv -r a -l --color=yes

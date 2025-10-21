@@ -1,0 +1,46 @@
+**REST AUTOREGRESSIVE
+avg_time_per_token:  0.019668820245491773
+avg_time_per_token_micro:  0.019670840030859244
+
+**REST STACK-SMALL-DEEPSEEK
+accept_lengths_tree_average:  1.9436919115152602
+accept_lengths_tree_average_micro:  1.8997266310510907
+avg_time_per_token:  0.012468626
+avg_time_per_token_micro:  0.012498331576614822
+
+**REST REPO
+accept_lengths_tree_average:  2.2774807481199013
+accept_lengths_tree_average_micro:  2.0064341201550917
+avg_time_per_token:  0.011607739
+avg_time_per_token_micro:  0.01160670468417971
+
+**REST REPO-IDENTIFIER (ERROR)
+accept_lengths_tree_average:  1.1352989392730952
+accept_lengths_tree_average_micro:  1.1263667667811075
+avg_time_per_token:  0.021862024
+avg_time_per_token_micro:  0.02187986674858923
+
+
+********************************************************************
+[truncated_data]
+********************************************************************
+[deepseekcoder-1.3B]
+**AUTOREGRESSIVE
+avg_time_per_token:  0.019996543397380995
+avg_time_per_token_micro:  0.01999904799173945
+
+**REST STACK-SMALL-DEEPSEEK
+accept_lengths_tree_average:  1.9235456864020501
+accept_lengths_tree_average_micro:  1.8860022210944518
+avg_time_per_token:  0.01236222
+avg_time_per_token_micro:  0.012385744206894027
+
+**REST REPO
+
+
+**REST REPO + CACHE
+k=50 l=20
+accept_lengths_tree_average:  2.953268612045477
+accept_lengths_tree_average_micro:  2.754687407858023
+avg_time_per_token:  0.009727108
+avg_time_per_token_micro:  0.0096401632239699

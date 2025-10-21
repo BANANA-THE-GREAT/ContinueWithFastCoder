@@ -1,0 +1,14 @@
+*\~
+*#*
+*.pyc
+*.egg-info/
+*.egg
+*.mypy_cache/
+.coverage
+coverage.xml
+/.tox/
+/build/
+/dist/
+/env/
+/.eggs/
+.vscode

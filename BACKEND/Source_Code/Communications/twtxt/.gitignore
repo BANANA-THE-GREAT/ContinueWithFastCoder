@@ -1,0 +1,14 @@
+.DS_Store
+.coverage
+*.pyc
+*.egg-info
+*.pex
+.cache
+.idea
+.tox
+build
+dist
+venv
+htmlcov
+docs/_build
+*.swp
