@@ -404,13 +404,13 @@ jobs:
           key: ${{ runner.os }}-vscode-node-modules-${{ hashFiles('extensions/vscode/package-lock.json') }}
 
       - name: Download build artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: vscode-extension-build
           path: extensions/vscode/build
 
       - name: Download e2e dependencies
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: vscode-e2e-dependencies
           path: extensions/vscode/e2e/storage
