@@ -337,7 +337,7 @@ jobs:
           npm run package
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: vscode-extension-build
           path: extensions/vscode/build
@@ -370,7 +370,7 @@ jobs:
           npm run e2e:ci:download
 
       - name: Upload e2e dependencies
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: vscode-e2e-dependencies
           path: extensions/vscode/e2e/storage
@@ -445,7 +445,7 @@ jobs:
 
       - name: Upload e2e test screenshots
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: e2e-failure-screenshots
           path: extensions/vscode/e2e/storage/screenshots
@@ -574,7 +574,7 @@ jobs:
 
       - name: Save fails report
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: jb-failure-report
           path: |
